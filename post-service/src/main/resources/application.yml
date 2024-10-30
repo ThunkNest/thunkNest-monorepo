@@ -1,0 +1,13 @@
+server:
+  port: ${PORT:2021}
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILE:local}
+  application:
+    name: auth-service
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, info, refresh
