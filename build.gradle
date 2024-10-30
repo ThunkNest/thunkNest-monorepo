@@ -4,3 +4,37 @@
  * This is a general purpose Gradle build.
  * To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.8/samples
  */
+
+buildscript {
+    ext {
+        springBootVersion = '3.1.1'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.validate.monorepo'
+    version = '2024.1'
+
+    sourceCompatibility = '17'
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+    }
+}
+
