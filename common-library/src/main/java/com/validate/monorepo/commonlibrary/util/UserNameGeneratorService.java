@@ -4,11 +4,11 @@ import com.github.javafaker.Faker;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RandomNameGeneratorService {
+public class UserNameGeneratorService {
 	
 	private final Faker faker;
 	
-	public RandomNameGeneratorService(Faker faker) {
+	public UserNameGeneratorService(Faker faker) {
 		this.faker = faker;
 	}
 	
