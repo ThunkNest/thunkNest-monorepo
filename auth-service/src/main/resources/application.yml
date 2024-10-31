@@ -22,4 +22,3 @@ springdoc:
     disable-swagger-default-url: true
   api-docs:
     path: /v3/api-docs
-  packages-to-scan: com.validate.monorepo.authservice.controller
