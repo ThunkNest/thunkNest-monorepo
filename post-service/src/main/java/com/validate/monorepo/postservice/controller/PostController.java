@@ -5,8 +5,15 @@ import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.model.post.PostDto;
 import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -25,8 +32,9 @@ public class PostController {
         description = "Creates a new post using the provided post data transfer object"
     )
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody PostDto postDto) {
-        return ResponseEntity.ok(postService.createPost(postDto));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post createPost(@RequestBody PostDto postDto) {
+        return postService.createPost(postDto);
     }
 
     @Operation(
@@ -34,8 +42,9 @@ public class PostController {
         description = "Adds a single comment to an existing post identified by postId"
     )
     @PostMapping("/{postId}/comments")
-    public ResponseEntity<Post> addComment(@PathVariable String postId, @RequestBody Comment comment) {
-        return ResponseEntity.ok(postService.addComment(postId, comment));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post addComment(@PathVariable String postId, @RequestBody Comment comment) {
+        return postService.addComment(postId, comment);
     }
 
     @Operation(
@@ -43,8 +52,9 @@ public class PostController {
         description = "Adds a batch of comments to an existing post identified by postId"
     )
     @PostMapping("/{postId}/comments/batch")
-    public ResponseEntity<Post> addComments(@PathVariable String postId, @RequestBody List<Comment> comments) {
-        return ResponseEntity.ok(postService.addComments(postId, comments));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post addComments(@PathVariable String postId, @RequestBody List<Comment> comments) {
+        return postService.addComments(postId, comments);
     }
 
     @Operation(
@@ -52,8 +62,9 @@ public class PostController {
         description = "Increments the like counter for the post identified by postId"
     )
     @PostMapping("/{postId}/like")
-    public ResponseEntity<Post> likePost(@PathVariable String postId) {
-        return ResponseEntity.ok(postService.likePost(postId));
+    @ResponseStatus(HttpStatus.OK)
+    public Post likePost(@PathVariable String postId) {
+        return postService.likePost(postId);
     }
 
     @Operation(
@@ -61,8 +72,9 @@ public class PostController {
         description = "Retrieves all posts created by the specified author"
     )
     @GetMapping("/author/{author}")
-    public ResponseEntity<List<Post>> getPostsByAuthor(@PathVariable String author) {
-        return ResponseEntity.ok(postService.getPostsByAuthor(author));
+    @ResponseStatus(HttpStatus.OK)
+    public List<Post> getPostsByAuthor(@PathVariable String author) {
+        return postService.getPostsByAuthor(author);
     }
 
     @Operation(
@@ -70,10 +82,11 @@ public class PostController {
         description = "Retrieves all posts created between the specified start and end times (in epoch milliseconds)"
     )
     @GetMapping("/range")
-    public ResponseEntity<List<Post>> getPostsByRange(
+    @ResponseStatus(HttpStatus.OK)
+    public List<Post> getPostsByRange(
             @RequestParam long startTime,
             @RequestParam long endTime) {
-        return ResponseEntity.ok(postService.getPostsByRange(startTime, endTime));
+        return postService.getPostsByRange(startTime, endTime);
     }
 
     @Operation(
@@ -81,7 +94,8 @@ public class PostController {
         description = "Retrieves 100 random posts from the database"
     )
     @GetMapping("/random")
-    public ResponseEntity<List<Post>> getRandom100() {
-        return ResponseEntity.ok(postService.getRandom100());
+    @ResponseStatus(HttpStatus.OK)
+    public List<Post> getRandom100() {
+        return postService.getRandom100();
     }
 } 
