@@ -2,8 +2,8 @@ server:
   port: ${PORT:2020}
 
 swagger:
-  title: "Valid8 Auth Service API"
-  description: "API documentation for Valid8 auth service"
+  title: "Authentication Service API"
+  description: "API documentation for authentication service"
 
 spring:
   profiles:
