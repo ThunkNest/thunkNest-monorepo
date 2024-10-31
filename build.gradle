@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.4'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.openapi.generator' version '5.4.0' // Updated to a more recent version
+    id 'org.openapi.generator' version '5.4.0'
 }
 
 group = 'com.validate.monorepo'
@@ -15,10 +15,10 @@ ext {
     lombokVersion = '1.18.30'
     mongodbDriverVersion = '5.1.0'
     rabbitmqVersion = '5.17.1'
-    springdocVersion = '2.1.0' // Updated for Spring Boot 3 compatibility
+    springdocVersion = '2.1.0'
     jjwtVersion = '0.11.5'
-    mockitoVersion = '5.5.0' // Updated Mockito to a more recent version
-    junitVersion = '5.9.3' // Updated JUnit to a recent version for better compatibility
+    mockitoVersion = '5.5.0'
+    junitVersion = '5.9.3'
 }
 
 allprojects {
