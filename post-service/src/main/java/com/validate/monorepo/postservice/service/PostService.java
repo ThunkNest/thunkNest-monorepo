@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PostService {
@@ -29,15 +30,19 @@ public class PostService {
 	}
 	
 	public Post addComment(String postId, Comment comment) {
+		Comment sanitizedComment = sanitizeComment(comment);
 		Post post = postRepository.findById(postId).orElseThrow(() ->
 				new BadRequestException("Cannot add comment to post that does not exist"));
-		return postRepository.save(post.addReply(comment));
+		return postRepository.save(post.addReply(sanitizedComment));
 	}
 	
 	public Post addComments(String postId, List<Comment> comments) {
 		Post post = postRepository.findById(postId).orElseThrow(() ->
 				new BadRequestException("Cannot add comment to post that does not exist"));
-		return postRepository.save(post.addReplies(comments));
+		List<Comment> sanitizedComments = comments.stream()
+				.map(this::sanitizeComment)
+				.toList();
+		return postRepository.save(post.addReplies(sanitizedComments));
 	}
 	
 	public Post likePost(String postId) {
@@ -61,6 +66,11 @@ public class PostService {
 	public Post getPostById(String id) {
 		return postRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("Post not found"));
+	}
+	
+	private Comment sanitizeComment(Comment comment) {
+		return new Comment(UUID.randomUUID().toString(), comment.text(), comment.author(), Instant.now().toEpochMilli(),
+				0, new ArrayList<>());
 	}
 	
 }

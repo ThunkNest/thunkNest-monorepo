@@ -18,6 +18,8 @@ public class OpenAPIConfig {
     private String title;
     @Value("${swagger.description}")
     private String description;
+    @Value("${server.port}")
+    private String port;
     
     @Bean
     public OpenAPI myOpenAPI() {
@@ -30,7 +32,7 @@ public class OpenAPIConfig {
                     .name("API Support")
                     .email("your-email@example.com")))
             .servers(Arrays.asList(
-                new Server().url("http://localhost:2020")
+                new Server().url("http://localhost:" + port)
                     .description("Local server")
             ));
     }
