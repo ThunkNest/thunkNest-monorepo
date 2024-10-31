@@ -1,6 +1,10 @@
 server:
   port: ${PORT:2021}
 
+swagger:
+  title: "Valid8 Auth Service API"
+  description: "API documentation for Valid8 auth service"
+
 spring:
   profiles:
     active: ${SPRING_PROFILE:local}
@@ -11,3 +15,10 @@ spring:
       web:
         exposure:
           include: health, info, refresh
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  api-docs:
+    path: /v3/api-docs
