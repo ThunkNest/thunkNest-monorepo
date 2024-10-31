@@ -23,7 +23,7 @@ public class PostService {
 	
 	public Post createPost(PostDto dto) {
 		Post newPost = new Post(null, dto.getTitle(), dto.getDescription(), 0, new ArrayList<>(),
-				dto.getCreatedBy(), Instant.now().toEpochMilli());
+				dto.getAuthor(), Instant.now().toEpochMilli());
 		
 		return postRepository.save(newPost);
 	}

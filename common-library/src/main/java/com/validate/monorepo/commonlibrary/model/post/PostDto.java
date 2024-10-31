@@ -19,6 +19,6 @@ public class PostDto {
 	private String description;
 	private long likeCount;
 	private List<Comment> comments;
-	private String createdBy;
+	private String author;
 	private long createdAt;
 }

@@ -12,24 +12,24 @@ public record Post(
 		String description,
 		long likeCount,
 		List<Comment> comments,
-		String createdBy,
+		String author,
 		long createdAt
 ) {
 	
 	public Post likePost() {
-		return new Post(id, title, description, likeCount() + 1, comments, createdBy, createdAt);
+		return new Post(id, title, description, likeCount() + 1, comments, author, createdAt);
 	}
 	
 	public Post addReply(Comment comment) {
 		List<Comment> commentList = comments();
 		commentList.add(comment);
-		return new Post(id, title, description, likeCount(), comments, createdBy, createdAt);
+		return new Post(id, title, description, likeCount(), comments, author, createdAt);
 	}
 	
 	public Post addReplies(List<Comment> comments) {
 		List<Comment> commentList = comments();
 		commentList.addAll(comments);
-		return new Post(id, title, description, likeCount(), comments, createdBy, createdAt);
+		return new Post(id, title, description, likeCount(), comments, author, createdAt);
 	}
 	
 }
