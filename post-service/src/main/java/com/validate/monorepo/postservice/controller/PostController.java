@@ -103,13 +103,13 @@ public class PostController {
         summary = "Add a reply to a comment",
         description = "Adds a reply to a specific comment within a post, identified by postId and commentId"
     )
-    @PostMapping("/{postId}/comments/{commentId}/reply")
+    @PostMapping("/{postId}/comments/{parentCommentId}/reply")
     @ResponseStatus(HttpStatus.CREATED)
     public Post addReplyToComment(
             @PathVariable String postId,
-            @PathVariable String commentId,
+            @PathVariable String parentCommentId,
             @RequestBody Comment reply) {
-        return postService.addReplyToComment(postId, commentId, reply);
+        return postService.addReplyToComment(postId, parentCommentId, reply);
     }
     
 } 

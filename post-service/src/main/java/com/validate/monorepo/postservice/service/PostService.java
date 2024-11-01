@@ -29,11 +29,16 @@ public class PostService {
 		return postRepository.save(newPost);
 	}
 	
+	public Post getPostById(String id) {
+		return postRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("Post not found"));
+	}
+	
 	public Post addCommentToPost(String postId, Comment comment) {
 		Comment sanitizedComment = sanitizeComment(comment);
 		Post post = postRepository.findById(postId).orElseThrow(() ->
 				new BadRequestException("Cannot add comment to post that does not exist"));
-		return postRepository.save(post.addReply(sanitizedComment));
+		return postRepository.save(post.addComment(sanitizedComment));
 	}
 	
 	public Post addComments(String postId, List<Comment> comments) {
@@ -42,7 +47,7 @@ public class PostService {
 		List<Comment> sanitizedComments = comments.stream()
 				.map(this::sanitizeComment)
 				.toList();
-		return postRepository.save(post.addReplies(sanitizedComments));
+		return postRepository.save(post.addComments(sanitizedComments));
 	}
 	
 	public Post likePost(String postId) {
@@ -63,20 +68,19 @@ public class PostService {
 		return postRepository.find100RandomPosts();
 	}
 	
-	public Post getPostById(String id) {
-		return postRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("Post not found"));
-	}
-	
-	public Post addReplyToComment(String postId, String commentId, Comment reply) {
-		Comment sanitizedReply = sanitizeComment(reply);
-		return postRepository.addReplyToComment(postId, commentId, sanitizedReply)
-				.orElseThrow(() -> new NotFoundException("Post or comment not found"));
+	public Post addReplyToComment(String postId, String parentCommentId, Comment reply) {
+		Comment sanitizedReply = sanitizeReply(parentCommentId, reply);
+		return postRepository.addReplyToComment(postId, parentCommentId, sanitizedReply);
 	}
 	
 	private Comment sanitizeComment(Comment comment) {
 		return new Comment(UUID.randomUUID().toString(), comment.text(), comment.author(), Instant.now().toEpochMilli(),
-				0, new ArrayList<>());
+				0, null, new ArrayList<>());
+	}
+	
+	private Comment sanitizeReply(String parentCommentId, Comment comment) {
+		return new Comment(UUID.randomUUID().toString(), comment.text(), comment.author(), Instant.now().toEpochMilli(),
+				0, parentCommentId, new ArrayList<>());
 	}
 	
 }
