@@ -8,23 +8,23 @@ public record Comment(
 		String author,
 		long createdAt,
 		long likeCount,
-		List<Comment> comments
+		List<Comment> replies
 ) {
 	
 	public Comment likeComment() {
-		return new Comment(id, text, author, createdAt, likeCount() + 1, comments);
+		return new Comment(id, text, author, createdAt, likeCount() + 1, replies);
 	}
 	
 	public Comment addReply(Comment comment) {
-		List<Comment> commentList = comments();
-		commentList.add(comment);
-		return new Comment(id, text, author, createdAt, likeCount, commentList);
+		List<Comment> repliesList = replies();
+		repliesList.add(comment);
+		return new Comment(id, text, author, createdAt, likeCount, repliesList);
 	}
 	
 	public Comment addReplies(List<Comment> comments) {
-		List<Comment> commentList = comments();
-		commentList.addAll(comments);
-		return new Comment(id, text, author, createdAt, likeCount, commentList);
+		List<Comment> repliesList = replies();
+		repliesList.addAll(comments);
+		return new Comment(id, text, author, createdAt, likeCount, repliesList);
 	}
 	
 }
