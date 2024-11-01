@@ -1,5 +1,5 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/validateDB
-      database: validateDB
+      uri: mongodb+srv://javaServiceUser:J1KOomWoId30LtuK@cluster0.7xfaek8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: ThunkNestDB
