@@ -23,7 +23,7 @@ public class PostService {
 	}
 	
 	public Post createPost(PostDto dto) {
-		Post newPost = new Post(null, dto.getTitle(), dto.getDescription(), 0, new ArrayList<>(),
+		Post newPost = new Post(null, dto.getTitle(), dto.getDescription(), 0, 0, 0, new ArrayList<>(),
 				dto.getAuthor(), Instant.now().toEpochMilli());
 		
 		return postRepository.save(newPost);
@@ -75,12 +75,12 @@ public class PostService {
 	
 	private Comment sanitizeComment(Comment comment) {
 		return new Comment(UUID.randomUUID().toString(), comment.text(), comment.author(), Instant.now().toEpochMilli(),
-				0, null, new ArrayList<>());
+				0, 0, 0,null, new ArrayList<>());
 	}
 	
 	private Comment sanitizeReply(String parentCommentId, Comment comment) {
 		return new Comment(UUID.randomUUID().toString(), comment.text(), comment.author(), Instant.now().toEpochMilli(),
-				0, parentCommentId, new ArrayList<>());
+				0, 0,0, parentCommentId, new ArrayList<>());
 	}
 	
 }

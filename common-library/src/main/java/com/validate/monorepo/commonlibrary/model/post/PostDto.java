@@ -18,6 +18,8 @@ public class PostDto {
 	private String title;
 	private String description;
 	private long likeCount;
+	private long upVoteCount;
+	private long downVoteCount;
 	private List<Comment> comments;
 	private String author;
 	private long createdAt;

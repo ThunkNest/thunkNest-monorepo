@@ -11,6 +11,8 @@ public record Post(
 		String title,
 		String description,
 		long likeCount,
+		long upVoteCount,
+		long downVoteCount,
 		List<Comment> comments,
 		String author,
 		long createdAt
@@ -18,16 +20,24 @@ public record Post(
 	public Post addComment(Comment comment) {
 		List<Comment> updatedComments = new ArrayList<>(comments);
 		updatedComments.add(comment);
-		return new Post(id, title, description, likeCount, updatedComments, author, createdAt);
+		return new Post(id, title, description, likeCount, upVoteCount, downVoteCount, updatedComments, author, createdAt);
 	}
-	
+
 	public Post addComments(List<Comment> comments) {
 		List<Comment> updatedComments = new ArrayList<>(comments);
 		updatedComments.addAll(comments);
-		return new Post(id, title, description, likeCount, updatedComments, author, createdAt);
+		return new Post(id, title, description, likeCount, upVoteCount, downVoteCount, updatedComments, author, createdAt);
 	}
-	
+
 	public Post likePost() {
-		return new Post(id, title, description, likeCount + 1, comments, author, createdAt);
+		return new Post(id, title, description, likeCount + 1, upVoteCount, downVoteCount, comments, author, createdAt);
+	}
+
+	public Post upVote() {
+		return new Post(id, title, description, likeCount, upVoteCount + 1, downVoteCount, comments, author, createdAt);
+	}
+
+	public Post downVote() {
+		return new Post(id, title, description, likeCount, upVoteCount, downVoteCount + 1, comments, author, createdAt);
 	}
 }
