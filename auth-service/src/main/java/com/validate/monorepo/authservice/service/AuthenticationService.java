@@ -5,7 +5,7 @@ import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
 import com.validate.monorepo.commonlibrary.model.user.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.repository.UserRepository;
-import com.validate.monorepo.commonlibrary.util.UserNameGeneratorService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

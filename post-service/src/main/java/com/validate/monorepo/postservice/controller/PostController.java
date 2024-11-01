@@ -44,7 +44,7 @@ public class PostController {
     @PostMapping("/{postId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public Post addComment(@PathVariable String postId, @RequestBody Comment comment) {
-        return postService.addComment(postId, comment);
+        return postService.addCommentToPost(postId, comment);
     }
 
     @Operation(
@@ -98,4 +98,18 @@ public class PostController {
     public List<Post> getRandom100() {
         return postService.getRandom100();
     }
+
+    @Operation(
+        summary = "Add a reply to a comment",
+        description = "Adds a reply to a specific comment within a post, identified by postId and commentId"
+    )
+    @PostMapping("/{postId}/comments/{commentId}/reply")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post addReplyToComment(
+            @PathVariable String postId,
+            @PathVariable String commentId,
+            @RequestBody Comment reply) {
+        return postService.addReplyToComment(postId, commentId, reply);
+    }
+    
 } 

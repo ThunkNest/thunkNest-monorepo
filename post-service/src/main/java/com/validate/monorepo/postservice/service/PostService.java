@@ -29,7 +29,7 @@ public class PostService {
 		return postRepository.save(newPost);
 	}
 	
-	public Post addComment(String postId, Comment comment) {
+	public Post addCommentToPost(String postId, Comment comment) {
 		Comment sanitizedComment = sanitizeComment(comment);
 		Post post = postRepository.findById(postId).orElseThrow(() ->
 				new BadRequestException("Cannot add comment to post that does not exist"));
@@ -66,6 +66,12 @@ public class PostService {
 	public Post getPostById(String id) {
 		return postRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("Post not found"));
+	}
+	
+	public Post addReplyToComment(String postId, String commentId, Comment reply) {
+		Comment sanitizedReply = sanitizeComment(reply);
+		return postRepository.addReplyToComment(postId, commentId, sanitizedReply)
+				.orElseThrow(() -> new NotFoundException("Post or comment not found"));
 	}
 	
 	private Comment sanitizeComment(Comment comment) {

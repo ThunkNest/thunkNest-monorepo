@@ -1,6 +1,7 @@
 package com.validate.monorepo.commonlibrary.repository;
 
 import com.validate.monorepo.commonlibrary.model.post.Post;
+import com.validate.monorepo.commonlibrary.repository.custom.CustomPostRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.repository.Aggregation;
@@ -8,7 +9,7 @@ import org.springframework.data.mongodb.repository.Aggregation;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends MongoRepository<Post, String> {
+public interface PostRepository extends MongoRepository<Post, String>, CustomPostRepository {
 	
 	List<Post> findByAuthor(String author);
 	List<Post> findByCreatedAtBetween(long startEpochMilli, long endEpochMilli);
