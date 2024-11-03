@@ -1,24 +1,23 @@
 package com.validate.monorepo.postservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.post.Comment;
+import com.validate.monorepo.commonlibrary.model.post.PostTag;
+import com.validate.monorepo.commonlibrary.model.post.Reply;
 import com.validate.monorepo.commonlibrary.model.post.Post;
-import com.validate.monorepo.commonlibrary.model.post.PostDto;
 import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     private final PostService postService;
@@ -26,90 +25,51 @@ public class PostController {
     public PostController(PostService postService) {
         this.postService = postService;
     }
-
-    @Operation(
-        summary = "Create a new post",
-        description = "Creates a new post using the provided post data transfer object"
-    )
+    
+    @Operation(summary = "Create a new post", description = "Creates a new post and saves it in the database.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Post createPost(@RequestBody PostDto postDto) {
-        return postService.createPost(postDto);
+    public Post createPost(@RequestBody Post post) {
+        return postService.createPost(post);
     }
-
-    @Operation(
-        summary = "Add a comment to a post",
-        description = "Adds a single comment to an existing post identified by postId"
-    )
-    @PostMapping("/{postId}/comments")
+    
+    @Operation(summary = "Get post by ID", description = "Fetches a post by its unique identifier.")
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Post getPostById(@PathVariable String id) {
+        return postService.getPostById(id);
+    }
+    
+    @Operation(summary = "Update an existing post", description = "Updates the details of an existing post by its ID.")
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Post updatePost(@PathVariable String id, @RequestBody Post updatedPost) {
+        updatedPost = new Post(id, updatedPost.title(), updatedPost.description(), updatedPost.upVoteCount(),
+            updatedPost.downVoteCount(), updatedPost.replyCount(), updatedPost.author(), updatedPost.tag(),
+            updatedPost.isDeleted(), updatedPost.createdAt());
+        return postService.updatePost(updatedPost);
+    }
+    
+    @Operation(summary = "Delete post by ID", description = "Marks a post as deleted by its unique identifier.")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePostById(@PathVariable String id) {
+        postService.deletePostById(id);
+    }
+    
+    @Operation(summary = "Add a reply to a post", description = "Adds a new reply to the specified post.")
+    @PostMapping("/{postId}/replies")
     @ResponseStatus(HttpStatus.CREATED)
-    public Post addComment(@PathVariable String postId, @RequestBody Comment comment) {
-        return postService.addCommentToPost(postId, comment);
+    public Reply addReplyToPost(@PathVariable String postId, @RequestBody Reply reply) {
+        reply = new Reply(null, postId, reply.parentReplyId(), reply.text(), reply.author(), 0, 0, 0, false, reply.createdAt());
+        return postService.addReplyToPost(reply);
     }
-
-    @Operation(
-        summary = "Add multiple comments to a post",
-        description = "Adds a batch of comments to an existing post identified by postId"
-    )
-    @PostMapping("/{postId}/comments/batch")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Post addComments(@PathVariable String postId, @RequestBody List<Comment> comments) {
-        return postService.addComments(postId, comments);
-    }
-
-    @Operation(
-        summary = "Like a post",
-        description = "Increments the like counter for the post identified by postId"
-    )
-    @PostMapping("/{postId}/like")
+    
+    @Operation(summary = "Tag a post", description = "Adds a tag to the specified post by its ID.")
+    @PostMapping("/{postId}/tags")
     @ResponseStatus(HttpStatus.OK)
-    public Post likePost(@PathVariable String postId) {
-        return postService.likePost(postId);
-    }
-
-    @Operation(
-        summary = "Get posts by author",
-        description = "Retrieves all posts created by the specified author"
-    )
-    @GetMapping("/author/{author}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Post> getPostsByAuthor(@PathVariable String author) {
-        return postService.getPostsByAuthor(author);
-    }
-
-    @Operation(
-        summary = "Get posts within a time range",
-        description = "Retrieves all posts created between the specified start and end times (in epoch milliseconds)"
-    )
-    @GetMapping("/range")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Post> getPostsByRange(
-            @RequestParam long startTime,
-            @RequestParam long endTime) {
-        return postService.getPostsByRange(startTime, endTime);
-    }
-
-    @Operation(
-        summary = "Get random posts",
-        description = "Retrieves 100 random posts from the database"
-    )
-    @GetMapping("/random")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Post> getRandom100() {
-        return postService.getRandom100();
-    }
-
-    @Operation(
-        summary = "Add a reply to a comment",
-        description = "Adds a reply to a specific comment within a post, identified by postId and commentId"
-    )
-    @PostMapping("/{postId}/comments/{parentCommentId}/reply")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Post addReplyToComment(
-            @PathVariable String postId,
-            @PathVariable String parentCommentId,
-            @RequestBody Comment reply) {
-        return postService.addReplyToComment(postId, parentCommentId, reply);
+    public Post tagPost(@PathVariable String postId, @RequestBody PostTag tag) {
+        return postService.tagPost(postId, tag);
     }
     
 } 
