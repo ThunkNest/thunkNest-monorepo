@@ -2,7 +2,6 @@ package com.validate.monorepo.commonlibrary.repository.custom;
 
 import com.validate.monorepo.commonlibrary.model.post.Reply;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,19 +13,28 @@ import java.util.List;
 @Repository
 public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	
-	@Autowired
-	private MongoTemplate mongoTemplate;
+	private final MongoTemplate mongoTemplate;
+	
+	public CustomReplyRepositoryImpl(MongoTemplate mongoTemplate) {
+		this.mongoTemplate = mongoTemplate;
+	}
 	
 	@Override
 	public List<Reply> findTopLevelRepliesByPostId(String postId) {
+		log.info("Finding top-level replies for post ID: {}", postId);
 		Query query = new Query(Criteria.where("postId").is(postId)
-				.and("parentCommentId").is(null));
-		return mongoTemplate.find(query, Reply.class);
+				.and("parentReplyId").is(null));
+		List<Reply> replies = mongoTemplate.find(query, Reply.class);
+		log.debug("Found {} top-level replies for post ID: {}", replies.size(), postId);
+		return replies;
 	}
 	
 	@Override
 	public List<Reply> findRepliesByReplyId(String replyId) {
-		Query query = new Query(Criteria.where("parentCommentId").is(replyId));
-		return mongoTemplate.find(query, Reply.class);
+		log.info("Finding replies for reply ID: {}", replyId);
+		Query query = new Query(Criteria.where("parentReplyId").is(replyId));
+		List<Reply> replies = mongoTemplate.find(query, Reply.class);
+		log.debug("Found {} replies for reply ID: {}", replies.size(), replyId);
+		return replies;
 	}
 }
