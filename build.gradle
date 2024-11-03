@@ -63,6 +63,9 @@ allprojects {
         // Swagger
         implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0"
 
+        // Apache Common
+        implementation 'org.apache.commons:commons-lang3:3.17.0'
+
         // Testing dependencies
         testImplementation "org.springframework.boot:spring-boot-starter-test"
         testImplementation "org.springframework.security:spring-security-test"
