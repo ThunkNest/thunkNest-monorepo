@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReplyRepository extends MongoRepository<Reply, String>, CustomReplyRepository {
 	
 	List<Reply> findTopLevelRepliesByPostId(final String postId);
-	List<Reply> findRepliesByReplyId(final String replyId);
+	List<Reply> findRepliesByParentReplyId(final String parentReplyId);
 
 //	@Aggregation("{ $sample: { size: 100 } }")
 //	List<Post> find100RandomPosts();

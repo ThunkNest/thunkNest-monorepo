@@ -1,6 +1,7 @@
-package com.validate.monorepo.commonlibrary.repository.custom;
+package com.validate.monorepo.commonlibrary.repository.impl;
 
 import com.validate.monorepo.commonlibrary.model.post.Reply;
+import com.validate.monorepo.commonlibrary.repository.custom.CustomReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,11 +31,11 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	}
 	
 	@Override
-	public List<Reply> findRepliesByReplyId(String replyId) {
-		log.info("Finding replies for reply ID: {}", replyId);
-		Query query = new Query(Criteria.where("parentReplyId").is(replyId));
+	public List<Reply> findRepliesByParentReplyId(String parentReplyId) {
+		log.info("Finding replies for reply ID: {}", parentReplyId);
+		Query query = new Query(Criteria.where("parentReplyId").is(parentReplyId));
 		List<Reply> replies = mongoTemplate.find(query, Reply.class);
-		log.debug("Found {} replies for reply ID: {}", replies.size(), replyId);
+		log.debug("Found {} replies for reply ID: {}", replies.size(), parentReplyId);
 		return replies;
 	}
 }

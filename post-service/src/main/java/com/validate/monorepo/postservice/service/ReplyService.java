@@ -2,7 +2,6 @@ package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.model.post.Reply;
 import com.validate.monorepo.commonlibrary.repository.ReplyRepository;
-import com.validate.monorepo.commonlibrary.repository.custom.CustomReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,7 @@ public class ReplyService {
 	 */
 	public List<Reply> getRepliesByReplyId(String replyId) {
 		log.debug("Fetching replies for reply ID: {}", replyId);
-		List<Reply> replies = replyRepository.findRepliesByReplyId(replyId);
+		List<Reply> replies = replyRepository.findRepliesByParentReplyId(replyId);
 		log.debug("Retrieved {} replies for reply ID: {}", replies.size(), replyId);
 		return replies;
 	}

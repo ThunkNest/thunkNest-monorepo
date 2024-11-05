@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.validate.monorepo.postservice'
+group = 'com.validate.monorepo.voteservice'
 version = '2024.1'
 
 repositories {
