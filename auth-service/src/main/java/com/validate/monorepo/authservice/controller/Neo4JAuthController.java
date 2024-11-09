@@ -1,8 +1,8 @@
 package com.validate.monorepo.authservice.controller;
 
-import com.validate.monorepo.authservice.service.AuthenticationService;
+import com.validate.monorepo.authservice.service.NeoAuthService;
 import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.neo.User;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
-public class AuthenticationController {
+@RequestMapping("/api/v2/auth")
+public class Neo4JAuthController {
 	
-	private final AuthenticationService authenticationService;
+	private final NeoAuthService authenticationService;
 
-	public AuthenticationController(AuthenticationService authenticationService) {
+	public Neo4JAuthController(NeoAuthService authenticationService) {
 		this.authenticationService = authenticationService;
 	}
 
