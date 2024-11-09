@@ -1,8 +1,4 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://javaServiceUser:J1KOomWoId30LtuK@cluster0.7xfaek8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      database: ThunkNestDB
   neo4j:
     uri: neo4j+s://a7083374.databases.neo4j.io
     authentication:
