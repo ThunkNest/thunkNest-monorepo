@@ -1,4 +1,4 @@
-package com.validate.monorepo.authservice.config;
+package com.validate.monorepo.commonconfig;
 
 import org.neo4j.driver.Driver;
 import org.springframework.context.annotation.Bean;

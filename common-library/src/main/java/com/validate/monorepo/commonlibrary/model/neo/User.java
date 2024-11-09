@@ -7,12 +7,13 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Node
 public record User(
 		@Id
 		@GeneratedValue(GeneratedValue.UUIDGenerator.class)
-		Long id,
+		UUID id,
 		String username,
 		OauthProvider oauthProvider,
 		String providerId,

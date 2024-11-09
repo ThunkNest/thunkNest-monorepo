@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,7 +32,7 @@ public class NeoAuthService {
 		return userRepository.save(newUser);
 	}
 	
-	public User getUserById(String id) {
+	public User getUserById(UUID id) {
 		return userRepository.findById(id).orElseThrow(() ->
 				new NotFoundException(String.format("User with Id=%s not found", id)));
 	}
