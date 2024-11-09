@@ -4,3 +4,8 @@ spring:
 #      uri: mongodb+srv://javaServiceUser:J1KOomWoId30LtuK@cluster0.7xfaek8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       uri: mongodb://localhost:27017/ThunkNestDB
       database: ThunkNestDB
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: neo4j
