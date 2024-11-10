@@ -1,37 +1,36 @@
 package com.validate.monorepo.commonlibrary.model.user;
 
+import com.validate.monorepo.commonlibrary.model.vote.DownVote;
+import com.validate.monorepo.commonlibrary.model.vote.Upvote;
+import com.validate.monorepo.commonlibrary.model.user.OauthProvider;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
-@Document(collection = "users")
+@Node
 public record User(
-		@Id String id,
-		String userName,
-		String googleId,
+		@Id
+		@GeneratedValue(GeneratedValue.UUIDGenerator.class)
+		UUID id,
+		String username,
 		OauthProvider oauthProvider,
+		String providerId,
+		long reputationScore,
 		String email,
-		String phone,
-		long valid8Score,
-		long commentCount,
-		Boolean emailNotificationEnabled,
-		Date dateOfBirth,
-		long createdAt,
-		Long updatedAt
-) {
-	
-	public User incrementCommentCount() {
-		long newCommentCount = commentCount() + 1;
-		return new User(id, userName, googleId, oauthProvider, email, phone, valid8Score, newCommentCount,
-				emailNotificationEnabled, dateOfBirth, createdAt, Instant.now().toEpochMilli());
-	}
-	
-	public User incrementValid8ScoreFromLike() {
-		long newValid8Score = valid8Score() + 3;
-		return new User(id, userName, googleId, oauthProvider, email, phone, newValid8Score, commentCount,
-				emailNotificationEnabled, dateOfBirth, createdAt, Instant.now().toEpochMilli());
-	}
-	
-}
+		String phoneNumber,
+		
+		@Relationship(type = "UPVOTED", direction = Relationship.Direction.OUTGOING)
+		List<Upvote> upVotes,
+		
+		@Relationship(type = "DOWNVOTED", direction = Relationship.Direction.OUTGOING)
+		List<DownVote> downVotes,
+				
+		@CreatedDate
+		LocalDateTime createdAt
+) {}

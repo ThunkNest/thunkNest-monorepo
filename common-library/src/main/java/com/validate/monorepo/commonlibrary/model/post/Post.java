@@ -1,30 +1,36 @@
 package com.validate.monorepo.commonlibrary.model.post;
 
+import com.validate.monorepo.commonlibrary.model.user.User;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
-@Document(collection = "posts")
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Node
 public record Post(
-		@Id String id,
+		@Id
+		@GeneratedValue(generatorClass = GeneratedValue.UUIDGenerator.class)
+		UUID id,
 		String title,
 		String description,
-		long upVoteCount,
-		long downVoteCount,
-		long replyCount,
-		String author,
-		PostTag tag,
 		boolean isDeleted,
-		long createdAt
-) {
-	
-	public Post deletePost() {
-		return new Post( id, title, description, upVoteCount, downVoteCount,
-				replyCount, author, tag, true, createdAt);
-	}
-	
-	public Post tagPost(PostTag tag) {
-		return new Post( id, title, description, upVoteCount, downVoteCount,
-				replyCount, author, tag, isDeleted, createdAt);
-	}
-	
-}
+		
+		@Relationship(type = "CREATED", direction = Relationship.Direction.INCOMING)
+		User author,
+		
+		@Relationship(type = "UPVOTED_BY", direction = Relationship.Direction.INCOMING)
+		List<User> upvotedBy,
+		
+		@Relationship(type = "DOWNVOTED_BY", direction = Relationship.Direction.INCOMING)
+		List<User> downvotedBy,
+		
+		@Relationship(type = "REPLIED_TO", direction = Relationship.Direction.OUTGOING)
+		List<Reply> replies,
+		@CreatedDate
+		LocalDateTime createdAt
+) { }

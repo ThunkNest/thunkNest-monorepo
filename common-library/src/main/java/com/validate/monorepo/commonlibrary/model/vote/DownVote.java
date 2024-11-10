@@ -1,16 +1,23 @@
-package com.validate.monorepo.commonlibrary.model.neo;
+package com.validate.monorepo.commonlibrary.model.vote;
 
+import com.validate.monorepo.commonlibrary.model.user.User;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.RelationshipProperties;
 import org.springframework.data.neo4j.core.schema.TargetNode;
 
+import java.time.LocalDateTime;
+
 @RelationshipProperties
-public record Upvote(
+public record DownVote(
 		@Id
 		@GeneratedValue
 		Long id,
 		
 		@TargetNode
-		User user
+		User user,
+		
+		@CreatedDate
+		LocalDateTime createdAt
 ) {}
