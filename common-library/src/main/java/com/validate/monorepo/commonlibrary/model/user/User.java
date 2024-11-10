@@ -1,8 +1,8 @@
 package com.validate.monorepo.commonlibrary.model.user;
 
+import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.vote.DownVote;
 import com.validate.monorepo.commonlibrary.model.vote.Upvote;
-import com.validate.monorepo.commonlibrary.model.user.OauthProvider;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -25,10 +25,10 @@ public record User(
 		String email,
 		String phoneNumber,
 		
-		@Relationship(type = "UPVOTED", direction = Relationship.Direction.OUTGOING)
+		@Relationship(type = "UPVOTED_BY", direction = Relationship.Direction.OUTGOING)
 		List<Upvote> upVotes,
 		
-		@Relationship(type = "DOWNVOTED", direction = Relationship.Direction.OUTGOING)
+		@Relationship(type = "DOWNVOTED_BY", direction = Relationship.Direction.OUTGOING)
 		List<DownVote> downVotes,
 				
 		@CreatedDate
