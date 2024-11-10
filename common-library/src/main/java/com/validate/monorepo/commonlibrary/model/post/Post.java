@@ -19,6 +19,8 @@ public record Post(
 		String title,
 		String description,
 		boolean isDeleted,
+		int upVoteCount,
+		int downVoteCount,
 		
 		@Relationship(type = "CREATED", direction = Relationship.Direction.INCOMING)
 		User author,
@@ -29,8 +31,16 @@ public record Post(
 		@Relationship(type = "DOWNVOTED_BY", direction = Relationship.Direction.INCOMING)
 		List<User> downvotedBy,
 		
-		@Relationship(type = "REPLIED_TO", direction = Relationship.Direction.OUTGOING)
+		@Relationship(type = "HAS_REPLY", direction = Relationship.Direction.OUTGOING)
 		List<Reply> replies,
+		
 		@CreatedDate
 		LocalDateTime createdAt
-) { }
+) {
+	
+	public Post deletePost() {
+		return new Post(id, title, description,true, upVoteCount, downVoteCount, author, upvotedBy,
+				downvotedBy, replies, createdAt);
+	}
+	
+}

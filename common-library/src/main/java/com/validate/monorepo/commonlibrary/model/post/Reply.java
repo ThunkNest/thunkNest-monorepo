@@ -17,11 +17,19 @@ public record Reply(
 		@GeneratedValue(generatorClass = GeneratedValue.UUIDGenerator.class)
 		UUID id,
 		String text,
+		int upVoteCount,
+		int downVoteCount,
 		
 		@Relationship(type = "CREATED", direction = Relationship.Direction.INCOMING)
 		User author,
-
-		@Relationship(type = "REPLIED_TO", direction = Relationship.Direction.OUTGOING)
+		
+		@Relationship(type = "UPVOTED_BY", direction = Relationship.Direction.INCOMING)
+		List<User> upvotedBy,
+		
+		@Relationship(type = "DOWNVOTED_BY", direction = Relationship.Direction.INCOMING)
+		List<User> downvotedBy,
+		
+		@Relationship(type = "HAS_REPLY", direction = Relationship.Direction.OUTGOING)
 		List<Reply> replies,
 		
 		@CreatedDate

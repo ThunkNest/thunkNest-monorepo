@@ -1,9 +1,9 @@
 package com.validate.monorepo.authservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
+import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
 import com.validate.monorepo.commonlibrary.model.user.User;
-import com.validate.monorepo.commonlibrary.model.user.OauthProvider;
 import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class AuthenticationService {
 	public User createUser(String emailAddress, OauthProvider provider, String googleId) {
 		String userName = createUniqueUserName();
 		
-		User newUser = new User(null, userName, OauthProvider.GOOGLE, googleId, 0, emailAddress, null,
+		User newUser = new User(null, userName, provider, googleId, 0, emailAddress, null,
 				List.of(), List.of(), LocalDateTime.now());
 		
 		return userRepository.save(newUser);
