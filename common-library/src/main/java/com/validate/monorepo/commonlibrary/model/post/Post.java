@@ -1,9 +1,7 @@
 package com.validate.monorepo.commonlibrary.model.post;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "posts")
 public record Post(
 		@Id String id,
 		String title,
