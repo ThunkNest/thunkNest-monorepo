@@ -1,6 +1,6 @@
 package com.validate.monorepo.commonlibrary.repository.neo4j;
 
-import com.validate.monorepo.commonlibrary.model.neo.user.User;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;

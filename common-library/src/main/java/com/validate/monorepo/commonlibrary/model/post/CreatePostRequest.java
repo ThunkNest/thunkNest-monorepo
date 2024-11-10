@@ -1,4 +1,4 @@
-package com.validate.monorepo.commonlibrary.model.neo.post;
+package com.validate.monorepo.commonlibrary.model.post;
 
 import java.util.UUID;
 

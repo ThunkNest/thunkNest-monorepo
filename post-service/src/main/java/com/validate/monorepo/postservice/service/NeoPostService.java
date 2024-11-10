@@ -1,8 +1,8 @@
 package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
-import com.validate.monorepo.commonlibrary.model.neo.post.Post;
-import com.validate.monorepo.commonlibrary.model.neo.user.User;
+import com.validate.monorepo.commonlibrary.model.post.Post;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.repository.neo4j.PostRepository;
 import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

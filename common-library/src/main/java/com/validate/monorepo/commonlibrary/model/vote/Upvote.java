@@ -1,6 +1,6 @@
-package com.validate.monorepo.commonlibrary.model.neo.vote;
+package com.validate.monorepo.commonlibrary.model.vote;
 
-import com.validate.monorepo.commonlibrary.model.neo.user.User;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;

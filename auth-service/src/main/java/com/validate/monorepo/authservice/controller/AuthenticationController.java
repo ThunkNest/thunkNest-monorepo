@@ -2,7 +2,7 @@ package com.validate.monorepo.authservice.controller;
 
 import com.validate.monorepo.authservice.service.AuthenticationService;
 import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
-import com.validate.monorepo.commonlibrary.model.neo.user.User;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

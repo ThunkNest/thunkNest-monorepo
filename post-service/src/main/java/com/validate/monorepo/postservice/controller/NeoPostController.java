@@ -1,7 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.neo.post.CreatePostRequest;
-import com.validate.monorepo.commonlibrary.model.neo.post.Post;
+import com.validate.monorepo.commonlibrary.model.post.CreatePostRequest;
+import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.postservice.service.NeoPostService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
