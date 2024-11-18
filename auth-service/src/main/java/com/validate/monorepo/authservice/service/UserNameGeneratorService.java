@@ -19,7 +19,9 @@ public class UserNameGeneratorService {
 		String animal = faker.animal().name();
 		int number = faker.number().numberBetween(100, 999);
 		
-		return adjective + "-" + animal + "-" + number;
+		String username = adjective + "-" + animal + "-" + number;
+		
+		return username.replace(' ', '-');
 	}
 	
 }
