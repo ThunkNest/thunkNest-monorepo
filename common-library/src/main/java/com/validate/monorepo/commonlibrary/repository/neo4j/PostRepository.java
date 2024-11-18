@@ -16,8 +16,8 @@ public interface PostRepository extends Neo4jRepository<Post, UUID> {
         DELETE r
         WITH p, u
         MERGE (p)<-[r2:UPVOTED_BY]-(u)
-        SET p.upvoteCount = COALESCE(p.upvoteCount, 0) + 1
-        SET p.downvoteCount = CASE WHEN r IS NOT NULL THEN p.downvoteCount - 1 ELSE p.downvoteCount END
+        SET p.upVoteCount = COALESCE(p.upVoteCount, 0) + 1
+        SET p.downVoteCount = CASE WHEN r IS NOT NULL THEN p.downVoteCount - 1 ELSE p.downVoteCount END
     """
 	)
 	void upVotePost(UUID postId, UUID userId);
@@ -25,7 +25,7 @@ public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	@Query("""
         MATCH (p:Post {id: $postId})<-[r:UPVOTED_BY]-(u:User {id: $userId})
         DELETE r
-        SET p.upvoteCount = p.upvoteCount - 1
+        SET p.upVoteCount = p.upVoteCount - 1
     """
 	)
 	void removeUpVote(UUID postId, UUID userId);
@@ -36,8 +36,8 @@ public interface PostRepository extends Neo4jRepository<Post, UUID> {
         DELETE r
         WITH p, u
         MERGE (p)<-[r2:DOWNVOTED_BY]-(u)
-        SET p.downvoteCount = COALESCE(p.downvoteCount, 0) + 1
-        SET p.upvoteCount = CASE WHEN r IS NOT NULL THEN p.upvoteCount - 1 ELSE p.upvoteCount END
+        SET p.downVoteCount = COALESCE(p.downVoteCount, 0) + 1
+        SET p.upVoteCount = CASE WHEN r IS NOT NULL THEN p.upVoteCount - 1 ELSE p.upVoteCount END
     """
 	)
 	void downVotePost(UUID postId, UUID userId);
@@ -45,7 +45,7 @@ public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	@Query("""
         MATCH (p:Post {id: $postId})<-[r:DOWNVOTED_BY]-(u:User {id: $userId})
         DELETE r
-        SET p.downvoteCount = p.downvoteCount - 1
+        SET p.downVoteCount = p.downVoteCount - 1
     """
 	)
 	void removeDownVote(UUID postId, UUID userId);
