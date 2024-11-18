@@ -33,23 +33,5 @@ public class AuthenticationController {
 	public User authenticateUser(@RequestBody UserAuthRequest request) {
 		return authenticationService.authenticate(request);
 	}
-
-	@Operation(
-			summary = "Get a user by email",
-			description = "Returns specified user details if they exist")
-	@GetMapping("/get-by-email/{email}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public User getUserByEmail(@PathVariable String email) {
-		return authenticationService.getUserByEmail(email);
-	}
-
-	@Operation(
-			summary = "Get a user by their Id",
-			description = "Returns specified user details if they exist")
-	@PostMapping("/get-by-id/{id}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public User getUserById(@PathVariable UUID id) {
-		return authenticationService.getUserById(id);
-	}
 	
 }
