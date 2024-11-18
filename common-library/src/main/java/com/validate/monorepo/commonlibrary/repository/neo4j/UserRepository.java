@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends Neo4jRepository<User, UUID> {
+	
 	@Query("MATCH (u:User {id: $id}) RETURN u")
 	Optional<User> findById(@Param("id") UUID id);
 	
@@ -24,4 +25,8 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
 	@Query("CALL db.index.fulltext.queryNodes('usernameIndex', $usernameFragment + '*') YIELD node " +
 			"RETURN node LIMIT 10")
 	List<User> searchByUsername(String usernameFragment);
+	
+	@Query("MATCH (u:User {id: $id}) DETACH DELETE u")
+	void deleteUserById(@Param("id") UUID id);
+	
 }

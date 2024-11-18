@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,12 +31,6 @@ public class AuthenticationService {
 		
 		return userRepository.save(newUser);
 	}
-	
-	public User getUserById(UUID id) {
-		return userRepository.findById(id).orElseThrow(() ->
-				new NotFoundException(String.format("User with Id=%s not found", id)));
-	}
-	
 	
 	public User getUserByEmail(String email) {
 		return userRepository.findByEmail(email).orElseThrow(() ->
