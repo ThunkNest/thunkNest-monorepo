@@ -3,13 +3,11 @@ package com.validate.monorepo.userservice.service;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
 import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class UserService {
 	
