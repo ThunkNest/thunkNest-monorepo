@@ -35,7 +35,7 @@ public class UserService {
 	
 	// Todo: Delete get all users method
 	public List<User> getAllUsers() {
-		return userRepository.findAll();
+		return userRepository.getAllUsers();
 	}
 	
 	public List<User> searchUsers(String fragment) {

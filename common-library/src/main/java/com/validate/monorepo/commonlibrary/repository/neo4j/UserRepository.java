@@ -29,4 +29,7 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
 	@Query("MATCH (u:User {id: $id}) DETACH DELETE u")
 	void deleteUserById(@Param("id") UUID id);
 	
+	@Query("MATCH (u:User) RETURN u")
+	List<User> getAllUsers();
+	
 }
