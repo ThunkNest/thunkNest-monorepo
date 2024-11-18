@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,8 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
 	
 	@Query("MATCH (user:User {email: $email}) RETURN user")
 	Optional<User> findByEmail(@Param("email") String email);
+	
+	@Query("CALL db.index.fulltext.queryNodes('usernameIndex', $usernameFragment + '*') YIELD node " +
+			"RETURN node LIMIT 10")
+	List<User> searchByUsername(String usernameFragment);
 }
