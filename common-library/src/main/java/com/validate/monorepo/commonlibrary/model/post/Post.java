@@ -1,5 +1,6 @@
 package com.validate.monorepo.commonlibrary.model.post;
 
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;

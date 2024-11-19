@@ -51,10 +51,10 @@ public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	void removeDownVote(UUID postId, UUID userId);
 	
 	@Query("""
-        MATCH (p:Post {id: $postId}), (r:Reply {id: $replyId})
-        MERGE (p)-[:REPLIED_TO]->(r)
-    """
-	)
+    MATCH (p:Post {id: $postId}), (r:Reply {id: $replyId})
+    MERGE (p)-[:HAS_REPLY]->(r)
+    MERGE (r)-[:BELONGS_TO]->(p)
+""")
 	void addReplyToPost(UUID postId, UUID replyId);
 	
 	@Query("""

@@ -33,4 +33,21 @@ public record User(
 				
 		@CreatedDate
 		LocalDateTime createdAt
-) {}
+) {
+	
+	public User upVoteReputationIncrease() {
+		return new User(id, username, oauthProvider, providerId, reputationScore + 3, email, phoneNumber,
+				upVotes, downVotes, createdAt);
+	}
+	
+	public User upVoteReputationIncreaseFromAuthor() {
+		return new User(id, username, oauthProvider, providerId, reputationScore + 5, email, phoneNumber,
+				upVotes, downVotes, createdAt);
+	}
+	
+	public User downVoteReputationDecrease() {
+		return new User(id, username, oauthProvider, providerId, reputationScore - 1, email, phoneNumber,
+				upVotes, downVotes, createdAt);
+	}
+	
+}

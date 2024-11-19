@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.validate.monorepo.reputationservice'
+version = '2024.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common-library')
+    implementation project(':common-config')
+}
+
+test {
+    useJUnitPlatform()
+}

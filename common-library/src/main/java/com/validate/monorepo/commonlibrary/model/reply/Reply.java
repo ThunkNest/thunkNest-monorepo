@@ -1,5 +1,6 @@
-package com.validate.monorepo.commonlibrary.model.post;
+package com.validate.monorepo.commonlibrary.model.reply;
 
+import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -32,6 +33,9 @@ public record Reply(
 		@Relationship(type = "HAS_REPLY", direction = Relationship.Direction.OUTGOING)
 		List<Reply> replies,
 		
+		@Relationship(type = "BELONGS_TO", direction = Relationship.Direction.INCOMING)
+		Post parentPost,
+		
 		@CreatedDate
 		LocalDateTime createdAt
-) { }
+) {}
