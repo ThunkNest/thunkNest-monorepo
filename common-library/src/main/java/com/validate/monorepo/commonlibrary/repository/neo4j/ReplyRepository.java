@@ -18,16 +18,17 @@ public interface ReplyRepository extends Neo4jRepository<Reply, UUID> {
 	void addReplyToReply(UUID parentReplyId, UUID replyId);
 	
 	@Query("""
-        MATCH (r:Reply {id: $replyId}), (u:User {id: $userId})
-        OPTIONAL MATCH (r)<-[rel:DOWNVOTED_BY]-(u)
-        DELETE rel
-        WITH r, u
-        MERGE (r)<-[r2:UPVOTED_BY]-(u)
-        SET r.upVoteCount = COALESCE(r.upVoteCount, 0) + 1
-        SET r.downVoteCount = CASE WHEN rel IS NOT NULL THEN r.downVoteCount - 1 ELSE r.downVoteCount END
-    """
-	)
+    MATCH (r:Reply {id: $replyId}), (u:User {id: $userId})
+    OPTIONAL MATCH (r)<-[rel:DOWNVOTED_BY]-(u)
+    WITH r, u, rel
+    DELETE rel
+    WITH r, u, CASE WHEN rel IS NOT NULL THEN 1 ELSE 0 END AS downVoteAdjustment
+    MERGE (r)<-[r2:UPVOTED_BY]-(u)
+    SET r.upVoteCount = COALESCE(r.upVoteCount, 0) + 1,
+        r.downVoteCount = r.downVoteCount - downVoteAdjustment
+""")
 	void upVoteReply(UUID replyId, UUID userId);
+	
 	
 	@Query("""
         MATCH (r:Reply {id: $replyId})<-[rel:UPVOTED_BY]-(u:User {id: $userId})

@@ -1,23 +1,59 @@
 package com.validate.monorepo.commonlibrary.repository.neo4j;
 
 import com.validate.monorepo.commonlibrary.model.post.Post;
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	@Query("""
+				MATCH (p:Post {id: $postId})
+				OPTIONAL MATCH (p)<-[created:CREATED]-(author:User)
+				RETURN p, collect(created), collect(author)
+		"""
+	)
+	Optional<Post> findById(@Param("postId") UUID postId);
+	
+	@Query("""
+    MATCH (p:Post {id: $postId})
+    OPTIONAL MATCH (p)<-[upvote:UPVOTED_BY]-(u:User)
+    RETURN collect(u)
+""")
+	List<User> findUpvotedUsers(@Param("postId") UUID postId);
+	
+	@Query("""
+    MATCH (p:Post {id: $postId})
+    OPTIONAL MATCH (p)<-[downvote:DOWNVOTED_BY]-(d:User)
+    RETURN collect(d)
+""")
+	List<User> findDownvotedUsers(@Param("postId") UUID postId);
+	
+	@Query("""
+    MATCH (p:Post {id: $postId})
+    OPTIONAL MATCH (p)-[reply:HAS_REPLY]->(r:Reply)
+    RETURN collect(r)
+""")
+	List<Reply> findReplies(@Param("postId") UUID postId);
+	
+	/* Voting Repository Methods for Posts*/
+	
+	@Query("""
         MATCH (p:Post {id: $postId}), (u:User {id: $userId})
         OPTIONAL MATCH (p)<-[r:DOWNVOTED_BY]-(u)
+        WITH p, u, r
         DELETE r
-        WITH p, u
+        WITH p, u, CASE WHEN r IS NOT NULL THEN 1 ELSE 0 END AS downVoteAdjustment
         MERGE (p)<-[r2:UPVOTED_BY]-(u)
-        SET p.upVoteCount = COALESCE(p.upVoteCount, 0) + 1
-        SET p.downVoteCount = CASE WHEN r IS NOT NULL THEN p.downVoteCount - 1 ELSE p.downVoteCount END
+        SET p.upVoteCount = COALESCE(p.upVoteCount, 0) + 1,
+          p.downVoteCount = p.downVoteCount - downVoteAdjustment
     """
 	)
 	void upVotePost(UUID postId, UUID userId);
@@ -31,14 +67,15 @@ public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	void removeUpVote(UUID postId, UUID userId);
 	
 	@Query("""
-        MATCH (p:Post {id: $postId}), (u:User {id: $userId})
-        OPTIONAL MATCH (p)<-[r:UPVOTED_BY]-(u)
-        DELETE r
-        WITH p, u
-        MERGE (p)<-[r2:DOWNVOTED_BY]-(u)
-        SET p.downVoteCount = COALESCE(p.downVoteCount, 0) + 1
-        SET p.upVoteCount = CASE WHEN r IS NOT NULL THEN p.upVoteCount - 1 ELSE p.upVoteCount END
-    """
+				MATCH (p:Post {id: $postId}), (u:User {id: $userId})
+				OPTIONAL MATCH (p)<-[r:UPVOTED_BY]-(u)
+				WITH p, u, r
+				DELETE r
+				WITH p, u, CASE WHEN r IS NOT NULL THEN 1 ELSE 0 END AS upVoteAdjustment
+				MERGE (p)<-[r2:DOWNVOTED_BY]-(u)
+				SET p.downVoteCount = COALESCE(p.downVoteCount, 0) + 1,
+								p.upVoteCount = p.upVoteCount - upVoteAdjustment
+		"""
 	)
 	void downVotePost(UUID postId, UUID userId);
 	
