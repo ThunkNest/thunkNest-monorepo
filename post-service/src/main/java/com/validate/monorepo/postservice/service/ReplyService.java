@@ -1,12 +1,17 @@
 package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.post.Reply;
+import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
+import com.validate.monorepo.commonlibrary.model.post.Post;
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.repository.neo4j.ReplyRepository;
+import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,18 +20,20 @@ public class ReplyService {
 	
 	private final ReplyRepository replyRepository;
 	private final PostService postService;
+	private final UserRepository userRepository;
 	
 	@Autowired
-	public ReplyService(ReplyRepository replyRepository, PostService postService) {
+	public ReplyService(ReplyRepository replyRepository, PostService postService, UserRepository userRepository) {
 		this.replyRepository = replyRepository;
 		this.postService = postService;
+		this.userRepository = userRepository;
 	}
 	
-	@Transactional
-	public void addReplyToReply(UUID parentReplyId, Reply reply) {
-		Reply newReply = createReply(reply);
-		replyRepository.addReplyToReply(parentReplyId, newReply.id());
-	}
+//	@Transactional
+//	public void addReplyToReply(UUID parentReplyId, Reply reply) {
+//		Reply newReply = createReply(reply);
+//		replyRepository.addReplyToReply(parentReplyId, newReply.id());
+//	}
 	
 	@Transactional
 	public void upVoteReply(UUID replyId, UUID userId) {
@@ -64,15 +71,26 @@ public class ReplyService {
 	}
 	
 	@Transactional
-	public Reply createReply(UUID postId, Reply reply) {
-		Reply createdReply = createReply(reply);
+	public Reply createReply(UUID postId, CreateReplyRequest request) {
+		Post post = postService.getPostById(postId);
+		Reply createdReply = createReply(post, request);
 		postService.addReplyToPost(postId, createdReply.id());
 		
 		return createdReply;
 	}
+
+	private Reply createReply(Post post, CreateReplyRequest request) {
+		User author = userRepository.findByUsername(request.authorUsername())
+				.orElseThrow(() -> new NotFoundException("Author does not exist"));
+		
+		Reply reply = new Reply(null, request.replyText(), 0, 0, author, List.of(),
+				List.of(), List.of(), post, LocalDateTime.now());
+		return replyRepository.save(reply);
+	}
 	
-	@Transactional
+  @Transactional
 	public void deleteReply(UUID replyId) {
 		replyRepository.deleteById(replyId);
 	}
+	
 }

@@ -1,5 +1,6 @@
 package com.validate.monorepo.commonlibrary.model.post;
 
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -38,9 +39,19 @@ public record Post(
 		LocalDateTime createdAt
 ) {
 	
-	public Post deletePost() {
-		return new Post(id, title, description,true, upVoteCount, downVoteCount, author, upvotedBy,
-				downvotedBy, replies, createdAt);
+	public Post {
+		if (upvotedBy == null) {
+			upvotedBy = List.of();
+		}
+		if (downvotedBy == null) {
+			downvotedBy = List.of();
+		}
+		if (replies == null) {
+			replies = List.of();
+		}
 	}
 	
+	public Post deletePost() {
+		return new Post(id, title, description, true, upVoteCount, downVoteCount, author, upvotedBy, downvotedBy, replies, createdAt);
+	}
 }

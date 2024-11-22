@@ -1,15 +1,15 @@
 server:
-  port: ${PORT:2022}
+  port: ${PORT:2023}
 
 swagger:
-  title: "User Service API"
-  description: "API documentation for user service"
+  title: "Reputation Service API"
+  description: "API documentation for reputation service"
 
 spring:
   profiles:
     active: ${SPRING_PROFILE:local}
   application:
-    name: user-service
+    name: reputation-service
   management:
     endpoints:
       web:

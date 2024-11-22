@@ -1,6 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.post.Reply;
+import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.postservice.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,12 @@ public class ReplyController {
 		this.replyService = replyService;
 	}
 	
-	@PostMapping("/{parentReplyId}")
-	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Add reply to a reply", description = "Add a reply to an existing reply by providing the parent reply ID.")
-	public void addReplyToReply(@PathVariable UUID parentReplyId, @RequestBody Reply reply) {
-		replyService.addReplyToReply(parentReplyId, reply);
-	}
+//	@PostMapping("/{parentReplyId}")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	@Operation(summary = "Add reply to a reply", description = "Add a reply to an existing reply by providing the parent reply ID.")
+//	public void addReplyToReply(@PathVariable UUID parentReplyId, @RequestBody Reply reply) {
+//		replyService.addReplyToReply(parentReplyId, reply);
+//	}
 	
 	@GetMapping("/{replyId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -51,9 +52,9 @@ public class ReplyController {
 	
 	@PostMapping("/post/{postId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Create a reply for a post", description = "Create a reply for a specific post by providing the post ID.")
-	public Reply createReply(@PathVariable UUID postId, @RequestBody Reply reply) {
-		return replyService.createReply(postId, reply);
+	@Operation(summary = "Add reply to a post", description = "Create a reply for a specific post by providing the post ID.")
+	public Reply createReply(@PathVariable UUID postId, @RequestBody CreateReplyRequest request) {
+		return replyService.createReply(postId, request);
 	}
 	
 	@DeleteMapping("/{replyId}")
