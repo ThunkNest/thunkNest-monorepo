@@ -1,8 +1,8 @@
-package com.validate.monorepo.commonlibrary.repository.neo4j;
+package com.validate.monorepo.commonlibrary.repository.mongo;
 
 import com.validate.monorepo.commonlibrary.model.reputation.neo4j.ReputationChange;
 import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ReputationRepository extends Neo4jRepository<ReputationChange, UUID> {
+public interface ReputationRepository extends MongoRepository<ReputationChange, UUID> {
 	
 	@Query("MATCH (user:User)<-[affects:AFFECTS]-(change:ReputationChange) " +
 			"WHERE change.timestamp >= datetime().epochMillis - 86400000 " +

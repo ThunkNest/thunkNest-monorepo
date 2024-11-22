@@ -1,9 +1,9 @@
-package com.validate.monorepo.commonlibrary.repository.neo4j;
+package com.validate.monorepo.commonlibrary.repository.mongo;
 
 import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
 import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
 import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PostRepository extends Neo4jRepository<Post, UUID> {
+public interface PostRepository extends MongoRepository<Post, UUID> {
 	@Query("""
 				MATCH (p:Post {id: $postId})
 				OPTIONAL MATCH (p)<-[created:CREATED]-(author:User)

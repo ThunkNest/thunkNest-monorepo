@@ -3,7 +3,7 @@ package com.validate.monorepo.authservice.service;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
 import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

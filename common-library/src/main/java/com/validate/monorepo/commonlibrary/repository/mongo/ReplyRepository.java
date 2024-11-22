@@ -1,14 +1,14 @@
-package com.validate.monorepo.commonlibrary.repository.neo4j;
+package com.validate.monorepo.commonlibrary.repository.mongo;
 
 import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface ReplyRepository extends Neo4jRepository<Reply, UUID> {
+public interface ReplyRepository extends MongoRepository<Reply, UUID> {
 	
 	@Query("""
         MATCH (parent:Reply {id: $parentReplyId}), (r:Reply {id: $replyId})

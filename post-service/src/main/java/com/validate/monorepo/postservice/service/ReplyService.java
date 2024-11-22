@@ -2,9 +2,9 @@ package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
 import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
-import com.validate.monorepo.commonlibrary.model.post.Post;
-import com.validate.monorepo.commonlibrary.model.reply.Reply;
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
+import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import com.validate.monorepo.commonlibrary.repository.neo4j.ReplyRepository;
 import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

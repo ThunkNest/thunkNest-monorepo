@@ -1,7 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
-import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
 import com.validate.monorepo.postservice.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
