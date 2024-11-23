@@ -1,7 +1,7 @@
-package com.validate.monorepo.commonlibrary.model.post;
+package com.validate.monorepo.commonlibrary.model.reply.neo4j;
 
-import com.validate.monorepo.commonlibrary.model.reply.Reply;
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -13,13 +13,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Node
-public record Post(
+public record Reply(
 		@Id
 		@GeneratedValue(generatorClass = GeneratedValue.UUIDGenerator.class)
 		UUID id,
-		String title,
-		String description,
-		boolean isDeleted,
+		String text,
 		int upVoteCount,
 		int downVoteCount,
 		
@@ -35,23 +33,9 @@ public record Post(
 		@Relationship(type = "HAS_REPLY", direction = Relationship.Direction.OUTGOING)
 		List<Reply> replies,
 		
+		@Relationship(type = "BELONGS_TO", direction = Relationship.Direction.INCOMING)
+		Post parentPost,
+		
 		@CreatedDate
 		LocalDateTime createdAt
-) {
-	
-	public Post {
-		if (upvotedBy == null) {
-			upvotedBy = List.of();
-		}
-		if (downvotedBy == null) {
-			downvotedBy = List.of();
-		}
-		if (replies == null) {
-			replies = List.of();
-		}
-	}
-	
-	public Post deletePost() {
-		return new Post(id, title, description, true, upVoteCount, downVoteCount, author, upvotedBy, downvotedBy, replies, createdAt);
-	}
-}
+) {}

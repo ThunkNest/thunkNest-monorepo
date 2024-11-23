@@ -1,6 +1,6 @@
-package com.validate.monorepo.commonlibrary.model.reputation;
+package com.validate.monorepo.commonlibrary.model.reputation.neo4j;
 
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;

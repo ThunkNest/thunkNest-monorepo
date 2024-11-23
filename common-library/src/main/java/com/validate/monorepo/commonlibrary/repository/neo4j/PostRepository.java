@@ -1,8 +1,8 @@
 package com.validate.monorepo.commonlibrary.repository.neo4j;
 
-import com.validate.monorepo.commonlibrary.model.post.Post;
-import com.validate.monorepo.commonlibrary.model.reply.Reply;
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
+import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoPostRepository")
 public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	@Query("""
 				MATCH (p:Post {id: $postId})

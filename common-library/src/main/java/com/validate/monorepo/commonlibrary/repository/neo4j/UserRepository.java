@@ -1,6 +1,6 @@
 package com.validate.monorepo.commonlibrary.repository.neo4j;
 
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoUserRepository")
 public interface UserRepository extends Neo4jRepository<User, UUID> {
 	
 	@Query("MATCH (u:User {id: $id}) RETURN u")

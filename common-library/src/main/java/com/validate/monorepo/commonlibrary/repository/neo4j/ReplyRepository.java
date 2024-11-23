@@ -1,13 +1,13 @@
 package com.validate.monorepo.commonlibrary.repository.neo4j;
 
-import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoReplyRepository")
 public interface ReplyRepository extends Neo4jRepository<Reply, UUID> {
 	
 	@Query("""

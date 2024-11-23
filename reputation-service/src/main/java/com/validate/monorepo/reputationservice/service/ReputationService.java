@@ -1,10 +1,10 @@
 package com.validate.monorepo.reputationservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.post.Post;
-import com.validate.monorepo.commonlibrary.model.reply.Reply;
-import com.validate.monorepo.commonlibrary.model.reputation.ReputationChange;
-import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
+import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
+import com.validate.monorepo.commonlibrary.model.reputation.neo4j.ReputationChange;
+import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import com.validate.monorepo.commonlibrary.repository.neo4j.ReplyRepository;
 import com.validate.monorepo.commonlibrary.repository.neo4j.ReputationRepository;
 import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
