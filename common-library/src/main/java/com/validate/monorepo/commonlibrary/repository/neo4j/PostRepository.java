@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoPostRepository")
 public interface PostRepository extends Neo4jRepository<Post, UUID> {
 	@Query("""
 				MATCH (p:Post {id: $postId})

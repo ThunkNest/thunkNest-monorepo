@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoReplyRepository")
 public interface ReplyRepository extends Neo4jRepository<Reply, UUID> {
 	
 	@Query("""

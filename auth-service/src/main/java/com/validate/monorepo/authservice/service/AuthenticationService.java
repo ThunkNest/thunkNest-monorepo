@@ -1,15 +1,17 @@
 package com.validate.monorepo.authservice.service;
 
-import com.validate.monorepo.commonlibrary.exception.NotFoundException;
+import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
-import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
-import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
+import com.validate.monorepo.commonlibrary.model.user.mongo.User;
+import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
+import com.validate.monorepo.commonlibrary.util.EmailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,27 +29,23 @@ public class AuthenticationService {
 		String userName = createUniqueUserName();
 		
 		User newUser = new User(null, userName, provider, googleId, 0, emailAddress, null,
-				List.of(), List.of(), LocalDateTime.now());
+				List.of(), List.of(), Instant.now().toEpochMilli());
 		
 		return userRepository.save(newUser);
 	}
 	
-	public User getUserByEmail(String email) {
-		return userRepository.findByEmail(email).orElseThrow(() ->
-				new NotFoundException(String.format("User with email=%s not found", email)));
-	}
-	
 	public User authenticate(UserAuthRequest request) {
-		if (accountExists(request.email())) {
-			return getUserByEmail(request.email());
+		final String email = request.email();
+		if (!EmailUtils.isValidEmail(email)) throw new BadRequestException("Provided email is not valid");
+		
+		Optional<User> findUser = userRepository.findByEmail(email);
+		
+		if (findUser.isPresent()) {
+			return findUser.get();
 		} else {
-			log.info("User with email={} does not exist creating new user", request.email());
-			return createUser(request.email(), request.provider(), request.providerId());
+			log.info("User with email={} does not exist creating new user", email);
+			return createUser(email, request.provider(), request.providerId());
 		}
-	}
-	
-	public boolean accountExists(String email) {
-		return userRepository.findByEmail(email).isPresent();
 	}
 	
 	private String createUniqueUserName() {

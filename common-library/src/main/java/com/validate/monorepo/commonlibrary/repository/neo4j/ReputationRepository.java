@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoReputationRepository")
 public interface ReputationRepository extends Neo4jRepository<ReputationChange, UUID> {
 	
 	@Query("MATCH (user:User)<-[affects:AFFECTS]-(change:ReputationChange) " +

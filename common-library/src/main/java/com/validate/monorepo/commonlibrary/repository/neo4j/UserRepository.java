@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Repository(value = "neoUserRepository")
 public interface UserRepository extends Neo4jRepository<User, UUID> {
 	
 	@Query("MATCH (u:User {id: $id}) RETURN u")
