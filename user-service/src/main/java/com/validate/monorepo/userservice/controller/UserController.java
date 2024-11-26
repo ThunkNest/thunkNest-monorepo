@@ -1,6 +1,6 @@
 package com.validate.monorepo.userservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
+import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import com.validate.monorepo.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -38,7 +37,7 @@ public class UserController {
 			description = "Returns specified user details if they exist")
 	@GetMapping("/get-by-id/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public User getUserById(@PathVariable UUID id) {
+	public User getUserById(@PathVariable String id) {
 		return userService.getUserById(id);
 	}
 	
@@ -72,7 +71,7 @@ public class UserController {
 			description = "Deletes a user and all relationships to other nodes id they exist")
 	@DeleteMapping("/delete-by-id/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void deleteUserById(@PathVariable UUID id) {
+	public void deleteUserById(@PathVariable String id) {
 		userService.deleteUserById(id);
 	}
 	
