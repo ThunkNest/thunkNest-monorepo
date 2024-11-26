@@ -7,6 +7,7 @@ import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
 import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import com.validate.monorepo.commonlibrary.repository.mongo.ReplyRepository;
 import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 public class ReplyService {
 	
@@ -66,8 +68,8 @@ public class ReplyService {
 		if (author == null) throw new BadRequestException(String.format("User with username=%s does not exist", request.authorUsername()));
 		
 		String replyText = request.replyText();
-		Reply reply = new Reply(null, replyText, 0, 0, author, List.of(),
-				List.of(), List.of(), postId, getMentionedUsersInReply(replyText), false, Instant.now().toEpochMilli());
+		Reply reply = new Reply(null, replyText, 0, 0, author, postId,
+				getMentionedUsersInReply(replyText), false, Instant.now().toEpochMilli());
 		return replyRepository.save(reply);
 	}
 	
@@ -83,12 +85,15 @@ public class ReplyService {
 	}
 	
 	private List<User> getMentionedUsersInReply(String replyText) {
-		Pattern mentionPattern = Pattern.compile("@[a-zA-Z]+-[a-zA-Z]+-\\d{3}");
+		log.info("getMentionedUsersInReply: finding tagged users");
+		
+		Pattern mentionPattern = Pattern.compile("@[\\w-]+");
 		Matcher matcher = mentionPattern.matcher(replyText);
 		
 		List<String> taggedUsernames = new ArrayList<>();
 		while (matcher.find()) {
-			taggedUsernames.add(matcher.group());
+			String username = matcher.group().substring(1);
+			taggedUsernames.add(username);
 		}
 		
 		List<User> taggedUsers = taggedUsernames.stream()

@@ -2,8 +2,6 @@ package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.event.ResourceType;
-import com.validate.monorepo.commonlibrary.model.event.VoteEvent;
 import com.validate.monorepo.commonlibrary.model.post.CreatePostRequest;
 import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
 import com.validate.monorepo.commonlibrary.model.user.mongo.User;
@@ -39,7 +37,7 @@ public class PostService {
 				new BadRequestException("Author does not exist"));
 		
 		Post post = new Post(null, request.title(), request.description(), false, 0,
-				0, request.openToCoFounder(), author, null, null, null, Instant.now().toEpochMilli()
+				0, request.openToCoFounder(), author, null, Instant.now().toEpochMilli()
 		);
 		
 		Post createdPost = postRepository.save(post);

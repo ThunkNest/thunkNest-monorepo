@@ -18,15 +18,13 @@ public record Post(
 		boolean openToCoFounder,
 		User author,
 		
-		List<User> upvotedBy,
-		List<User> downvotedBy,
 		List<String> replies,
 		
 		long createdAt
 ) {
 	
 	public Post deletePost() {
-		return new Post(id, title, description, true, upVoteCount, downVoteCount, openToCoFounder, author, upvotedBy, downvotedBy, replies, createdAt);
+		return new Post(id, title, description, true, upVoteCount, downVoteCount, openToCoFounder, author, replies, createdAt);
 	}
 
 }

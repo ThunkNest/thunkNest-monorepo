@@ -14,10 +14,6 @@ public record Reply(
 		int upVoteCount,
 		int downVoteCount,
 		User author,
-		
-		List<User> upvotedBy,
-		List<User> downvotedBy,
-		List<Reply> replies,
 		String parentPostId,
 		
 		List<User> taggedUsers,
