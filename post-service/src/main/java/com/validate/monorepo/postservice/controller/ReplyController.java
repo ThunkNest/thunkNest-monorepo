@@ -52,8 +52,8 @@ public class ReplyController {
 	@PostMapping("/{replyId}")
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Update a reply by ID", description = "Update a reply by its unique ID.")
-	public Reply updateReplyById(@PathVariable String replyId) {
-		return replyService.getReplyById(replyId);
+	public Reply updateReplyById(@PathVariable String replyId, @RequestBody ReplyRequest request) {
+		return replyService.updateReply(replyId, request);
 	}
 	
 	@DeleteMapping("/{replyId}")

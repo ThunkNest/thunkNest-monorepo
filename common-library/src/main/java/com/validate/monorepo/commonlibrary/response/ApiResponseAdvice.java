@@ -49,15 +49,7 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 		}
 
 		HttpStatus status = getHttpStatus(response);
-
-		if (body instanceof String) {
-			try {
-				return objectMapper.writeValueAsString(new GlobalResponse<>(true, body, "Request was successful", status));
-			} catch (JsonProcessingException e) {
-				throw new RuntimeException("Error serializing response", e);
-			}
-		}
-
+		
 		return new GlobalResponse<>(true, body, "Request was successful", status);
 	}
 	
