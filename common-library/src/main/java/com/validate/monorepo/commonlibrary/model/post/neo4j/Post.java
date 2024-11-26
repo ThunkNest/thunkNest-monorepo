@@ -20,6 +20,7 @@ public record Post(
 		boolean isDeleted,
 		int upVoteCount,
 		int downVoteCount,
+		boolean openToCoFounder,
 		
 		@Relationship(type = "CREATED", direction = Relationship.Direction.INCOMING)
 		User author,
@@ -38,6 +39,6 @@ public record Post(
 ) {
 	
 	public Post deletePost() {
-		return new Post(id, title, description, true, upVoteCount, downVoteCount, author, upvotedBy, downvotedBy, replies, createdAt);
+		return new Post(id, title, description, true, upVoteCount, downVoteCount, openToCoFounder, author, upvotedBy, downvotedBy, replies, createdAt);
 	}
 }

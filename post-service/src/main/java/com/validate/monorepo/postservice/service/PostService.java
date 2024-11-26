@@ -40,7 +40,7 @@ public class PostService {
 		User user = new User(UUID.randomUUID(), "ugly-monster-123", OauthProvider.GOOGLE, "12345",
 				11232, "fake@gmail.com", null, List.of(), List.of(), LocalDateTime.now());
 		return new Post(UUID.randomUUID(), request.title(), request.description(), false, 0,
-				0, user, List.of(), List.of(), List.of(), LocalDateTime.now());
+				0, true, user, List.of(), List.of(), List.of(), LocalDateTime.now());
 	}
 	
 //	public Post createPost(CreatePostRequest request) {
