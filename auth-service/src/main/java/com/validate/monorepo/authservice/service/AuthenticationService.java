@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -29,7 +28,7 @@ public class AuthenticationService {
 		String userName = createUniqueUserName();
 		
 		User newUser = new User(null, userName, provider, googleId, 0, emailAddress, null,
-				List.of(), List.of(), Instant.now().toEpochMilli());
+				Instant.now().toEpochMilli());
 		
 		return userRepository.save(newUser);
 	}

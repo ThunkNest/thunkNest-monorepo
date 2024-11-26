@@ -1,7 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.post.CreatePostRequest;
-import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
+import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
 import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -43,7 +42,7 @@ public class PostController {
 	@Operation(
 			summary = "Get post by ID",
 			description = "Retrieve a post by its unique ID.")
-	public Post getPostById(@PathVariable UUID postId) {
+	public Post getPostById(@PathVariable String postId) {
 		return postService.getPostById(postId);
 	}
 	
@@ -52,7 +51,7 @@ public class PostController {
 	@Operation(
 			summary = "Get all posts by author",
 			description = "Retrieve all posts created by a specific author.")
-	public List<Post> getAllPostsByAuthor(@PathVariable UUID userId) {
+	public List<Post> getAllPostsByAuthor(@PathVariable String userId) {
 		return postService.getAllPostsByAuthor(userId);
 	}
 	
@@ -61,7 +60,7 @@ public class PostController {
 	@Operation(
 			summary = "Get all posts user interacted with",
 			description = "Retrieve all posts that a user has interacted with, including upvotes, downvotes, replies, and created posts.")
-	public List<Post> getAllPostsUserInteractedWith(@PathVariable UUID userId) {
+	public List<Post> getAllPostsUserInteractedWith(@PathVariable String userId) {
 		return postService.getAllPostsUserInteractedWith(userId);
 	}
 	
@@ -79,7 +78,7 @@ public class PostController {
 	@Operation(
 			summary = "Delete a post",
 			description = "Delete a post by its unique ID.")
-	public void deletePost(@PathVariable UUID postId) {
+	public void deletePost(@PathVariable String postId) {
 		postService.deletePost(postId);
 	}
 }

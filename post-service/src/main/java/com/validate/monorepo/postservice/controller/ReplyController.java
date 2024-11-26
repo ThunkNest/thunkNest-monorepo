@@ -1,7 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
-import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
+import com.validate.monorepo.commonlibrary.model.reply.ReplyRequest;
+import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
 import com.validate.monorepo.postservice.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/replies")
@@ -29,17 +28,17 @@ public class ReplyController {
 		this.replyService = replyService;
 	}
 	
-//	@PostMapping("/{parentReplyId}")
-//	@ResponseStatus(HttpStatus.CREATED)
-//	@Operation(summary = "Add reply to a reply", description = "Add a reply to an existing reply by providing the parent reply ID.")
-//	public void addReplyToReply(@PathVariable UUID parentReplyId, @RequestBody Reply reply) {
-//		replyService.addReplyToReply(parentReplyId, reply);
-//	}
+	@PostMapping("/post/{postId}")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Operation(summary = "Add reply to a post", description = "Create a reply for a specific post by providing the post ID.")
+	public Reply replyToPost(@PathVariable String postId, @RequestBody ReplyRequest request) {
+		return replyService.createReply(postId, request);
+	}
 	
 	@GetMapping("/{replyId}")
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Get reply by ID", description = "Retrieve a reply by its unique ID.")
-	public Reply getReplyById(@PathVariable UUID replyId) {
+	public Reply getReplyById(@PathVariable String replyId) {
 		return replyService.getReplyById(replyId);
 	}
 	
@@ -50,17 +49,17 @@ public class ReplyController {
 		return replyService.getAllReplies();
 	}
 	
-	@PostMapping("/post/{postId}")
-	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Add reply to a post", description = "Create a reply for a specific post by providing the post ID.")
-	public Reply createReply(@PathVariable UUID postId, @RequestBody CreateReplyRequest request) {
-		return replyService.createReply(postId, request);
+	@PostMapping("/{replyId}")
+	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "Update a reply by ID", description = "Update a reply by its unique ID.")
+	public Reply updateReplyById(@PathVariable String replyId, @RequestBody ReplyRequest request) {
+		return replyService.updateReply(replyId, request);
 	}
 	
 	@DeleteMapping("/{replyId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Delete a reply", description = "Delete a reply by its unique ID.")
-	public void deleteReply(@PathVariable UUID replyId) {
+	public void deleteReply(@PathVariable String replyId) {
 		replyService.deleteReply(replyId);
 	}
 

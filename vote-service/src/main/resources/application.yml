@@ -1,15 +1,15 @@
 server:
-  port: ${PORT:2020}
+  port: ${PORT:2024}
 
 swagger:
-  title: "Authentication Service API"
-  description: "API documentation for authentication service"
+  title: "Vote Service API"
+  description: "API documentation for vote service"
 
 spring:
   profiles:
     active: ${SPRING_PROFILE:dev}
   application:
-    name: auth-service
+    name: vote-service
   management:
     endpoints:
       web:

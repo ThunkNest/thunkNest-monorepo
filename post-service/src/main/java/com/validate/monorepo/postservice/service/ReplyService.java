@@ -1,21 +1,27 @@
 package com.validate.monorepo.postservice.service;
 
+import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
-import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
-import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
-import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
-import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
-import com.validate.monorepo.commonlibrary.repository.neo4j.ReplyRepository;
-import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
+import com.validate.monorepo.commonlibrary.model.reply.ReplyRequest;
+import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
+import com.validate.monorepo.commonlibrary.model.user.mongo.User;
+import com.validate.monorepo.commonlibrary.repository.mongo.ReplyRepository;
+import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ReplyService {
 	
@@ -30,34 +36,8 @@ public class ReplyService {
 		this.userRepository = userRepository;
 	}
 	
-//	@Transactional
-//	public void addReplyToReply(UUID parentReplyId, Reply reply) {
-//		Reply newReply = createReply(reply);
-//		replyRepository.addReplyToReply(parentReplyId, newReply.id());
-//	}
-	
-	@Transactional
-	public void upVoteReply(UUID replyId, UUID userId) {
-		replyRepository.upVoteReply(replyId, userId);
-	}
-	
-	@Transactional
-	public void removeUpVoteReply(UUID replyId, UUID userId) {
-		replyRepository.removeUpVoteReply(replyId, userId);
-	}
-	
-	@Transactional
-	public void downVoteReply(UUID replyId, UUID userId) {
-		replyRepository.downVoteReply(replyId, userId);
-	}
-	
-	@Transactional
-	public void removeDownVoteReply(UUID replyId, UUID userId) {
-		replyRepository.removeDownVoteReply(replyId, userId);
-	}
-	
 	@Transactional(readOnly = true)
-	public Reply getReplyById(UUID replyId) {
+	public Reply getReplyById(String replyId) {
 		return replyRepository.findById(replyId).orElseThrow(() ->
 				new NotFoundException(String.format("Reply with ID=%s not found", replyId)));
 	}
@@ -67,38 +47,62 @@ public class ReplyService {
 		return replyRepository.findAll();
 	}
 	
-	public Reply createReply(Reply reply) {
-		return replyRepository.save(reply);
+	@Transactional
+	public Reply updateReply(String replyId, ReplyRequest request) {
+		getReplyById(replyId);
+		String replyText = request.replyText();
+		
+		return replyRepository.updateReply(replyId, replyText, getMentionedUsersInReply(replyText));
 	}
 	
 	@Transactional
-	public Reply createReply(UUID postId, CreateReplyRequest request) {
-		User user = new User(UUID.randomUUID(), "ugly-monster-123", OauthProvider.GOOGLE, "12345",
-				11232, "fake@gmail.com", null, List.of(), List.of(), LocalDateTime.now());
+	public Reply createReply(String postId, ReplyRequest request) {
+		postService.getPostById(postId);
+		Reply createdReply = addReplyToDataStore(postId, request);
+		postService.addReplyToPost(postId, createdReply.id());
 		
-		return new Reply(UUID.randomUUID(), request.replyText(), 0, 0, user, List.of(), List.of(),
-				List.of(), null, LocalDateTime.now());
+		return createdReply;
 	}
-//	public Reply createReply(UUID postId, CreateReplyRequest request) {
-//		Post post = postService.getPostById(postId);
-//		Reply createdReply = createReply(post, request);
-//		postService.addReplyToPost(postId, createdReply.id());
-//
-//		return createdReply;
-//	}
 
-	private Reply createReply(Post post, CreateReplyRequest request) {
-		User author = userRepository.findByUsername(request.authorUsername())
-				.orElseThrow(() -> new NotFoundException("Author does not exist"));
+	private Reply addReplyToDataStore(String postId, ReplyRequest request) {
+		User author = getUserByUserName(request.authorUsername());
 		
-		Reply reply = new Reply(null, request.replyText(), 0, 0, author, List.of(),
-				List.of(), List.of(), post, LocalDateTime.now());
+		if (author == null) throw new BadRequestException(String.format("User with username=%s does not exist", request.authorUsername()));
+		
+		String replyText = request.replyText();
+		Reply reply = new Reply(null, replyText, 0, 0, author, postId,
+				getMentionedUsersInReply(replyText), false, Instant.now().toEpochMilli());
 		return replyRepository.save(reply);
 	}
 	
-  @Transactional
-	public void deleteReply(UUID replyId) {
+	private User getUserByUserName(String username) {
+		return userRepository.findByUsername(username).orElse(null);
+	}
+	
+	@Transactional
+	public void deleteReply(String replyId) {
+		Reply replyToDelete = getReplyById(replyId);
+		postService.deleteReplyFromPost(replyToDelete.parentPostId(), replyId);
 		replyRepository.deleteById(replyId);
+	}
+	
+	private List<User> getMentionedUsersInReply(String replyText) {
+		log.info("getMentionedUsersInReply: finding tagged users");
+		
+		Pattern mentionPattern = Pattern.compile("@[\\w-]+");
+		Matcher matcher = mentionPattern.matcher(replyText);
+		
+		// Collect all unique tagged usernames into a Set
+		Set<String> taggedUsernames = matcher.results()
+				.map(matchResult -> matchResult.group().substring(1)) // Remove '@' prefix
+				.collect(Collectors.toSet());
+		
+		if (taggedUsernames.isEmpty()) {
+			return List.of();
+		}
+		
+		// Batch query to fetch users by username
+		return userRepository.findAllByUsernameIn(taggedUsernames);
 	}
 	
 }

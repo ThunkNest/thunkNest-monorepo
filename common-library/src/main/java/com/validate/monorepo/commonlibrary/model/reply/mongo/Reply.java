@@ -13,16 +13,11 @@ public record Reply(
 		String text,
 		int upVoteCount,
 		int downVoteCount,
-		
 		User author,
+		String parentPostId,
 		
-		List<User> upvotedBy,
-		
-		List<User> downvotedBy,
-		
-		List<Reply> replies,
-		
-		Object parentPost,
+		List<User> taggedUsers,
+		boolean isEdited,
 		
 		long createdAt
 ) {}
