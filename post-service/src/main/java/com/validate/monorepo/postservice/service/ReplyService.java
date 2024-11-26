@@ -1,6 +1,7 @@
 package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
+import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.reply.CreateReplyRequest;
 import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
 import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
@@ -72,12 +73,19 @@ public class ReplyService {
 	
 	@Transactional
 	public Reply createReply(UUID postId, CreateReplyRequest request) {
-		Post post = postService.getPostById(postId);
-		Reply createdReply = createReply(post, request);
-		postService.addReplyToPost(postId, createdReply.id());
+		User user = new User(UUID.randomUUID(), "ugly-monster-123", OauthProvider.GOOGLE, "12345",
+				11232, "fake@gmail.com", null, List.of(), List.of(), LocalDateTime.now());
 		
-		return createdReply;
+		return new Reply(UUID.randomUUID(), request.replyText(), 0, 0, user, List.of(), List.of(),
+				List.of(), null, LocalDateTime.now());
 	}
+//	public Reply createReply(UUID postId, CreateReplyRequest request) {
+//		Post post = postService.getPostById(postId);
+//		Reply createdReply = createReply(post, request);
+//		postService.addReplyToPost(postId, createdReply.id());
+//
+//		return createdReply;
+//	}
 
 	private Reply createReply(Post post, CreateReplyRequest request) {
 		User author = userRepository.findByUsername(request.authorUsername())
