@@ -16,8 +16,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -90,18 +92,17 @@ public class ReplyService {
 		Pattern mentionPattern = Pattern.compile("@[\\w-]+");
 		Matcher matcher = mentionPattern.matcher(replyText);
 		
-		List<String> taggedUsernames = new ArrayList<>();
-		while (matcher.find()) {
-			String username = matcher.group().substring(1);
-			taggedUsernames.add(username);
+		// Collect all unique tagged usernames into a Set
+		Set<String> taggedUsernames = matcher.results()
+				.map(matchResult -> matchResult.group().substring(1)) // Remove '@' prefix
+				.collect(Collectors.toSet());
+		
+		if (taggedUsernames.isEmpty()) {
+			return List.of();
 		}
 		
-		List<User> taggedUsers = taggedUsernames.stream()
-				.map(this::getUserByUserName)
-				.filter(Objects::nonNull)
-				.toList();
-		
-		return taggedUsers.isEmpty() ? List.of() : taggedUsers;
+		// Batch query to fetch users by username
+		return userRepository.findAllByUsernameIn(taggedUsernames);
 	}
 	
 }
