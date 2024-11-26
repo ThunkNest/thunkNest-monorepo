@@ -2,6 +2,7 @@ package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
+import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.event.ResourceType;
 import com.validate.monorepo.commonlibrary.model.event.VoteEvent;
 import com.validate.monorepo.commonlibrary.model.post.CreatePostRequest;
@@ -36,19 +37,26 @@ public class PostService {
 	
 	@Transactional
 	public Post createPost(CreatePostRequest request) {
-		User author = userRepository.findById(request.authorId()).orElseThrow(() ->
-				new BadRequestException("Author does not exist"));
-		
-		Post post = new Post(null, request.title(), request.description(), false, 0,
-				0, author, null, null, null, LocalDateTime.now()
-		);
-		
-		Post createdPost = postRepository.save(post);
-		log.info("Created Post with ID: {}", createdPost.id());
-		log.info("Post: {}", createdPost);
-		
-		return createdPost;
+		User user = new User(UUID.randomUUID(), "ugly-monster-123", OauthProvider.GOOGLE, "12345",
+				11232, "fake@gmail.com", null, List.of(), List.of(), LocalDateTime.now());
+		return new Post(UUID.randomUUID(), request.title(), request.description(), false, 0,
+				0, true, user, List.of(), List.of(), List.of(), LocalDateTime.now());
 	}
+	
+//	public Post createPost(CreatePostRequest request) {
+//		User author = userRepository.findById(request.authorId()).orElseThrow(() ->
+//				new BadRequestException("Author does not exist"));
+//
+//		Post post = new Post(null, request.title(), request.description(), false, 0,
+//				0, author, null, null, null, LocalDateTime.now()
+//		);
+//
+//		Post createdPost = postRepository.save(post);
+//		log.info("Created Post with ID: {}", createdPost.id());
+//		log.info("Post: {}", createdPost);
+//
+//		return createdPost;
+//	}
 	
 	@Transactional
 	public void upVotePost(UUID postId, UUID userId) {
