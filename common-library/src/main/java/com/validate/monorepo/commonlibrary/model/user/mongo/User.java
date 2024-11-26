@@ -18,8 +18,8 @@ public record User(
 		long reputationScore,
 		String email,
 		String phoneNumber,
-		List<UpVote> upVotes,
-		List<DownVote> downVotes,
+		List<String> upVotes,
+		List<String> downVotes,
 		long createdAt
 ) {
 	

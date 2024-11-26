@@ -5,19 +5,18 @@ import com.validate.monorepo.commonlibrary.exception.NotFoundException;
 import com.validate.monorepo.commonlibrary.model.event.ResourceType;
 import com.validate.monorepo.commonlibrary.model.event.VoteEvent;
 import com.validate.monorepo.commonlibrary.model.post.CreatePostRequest;
-import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
-import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
+import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
+import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import com.validate.monorepo.commonlibrary.rabbitmq.EventPublisher;
-import com.validate.monorepo.commonlibrary.repository.neo4j.PostRepository;
-import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
+import com.validate.monorepo.commonlibrary.repository.mongo.PostRepository;
+import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -40,7 +39,7 @@ public class PostService {
 				new BadRequestException("Author does not exist"));
 		
 		Post post = new Post(null, request.title(), request.description(), false, 0,
-				0, author, null, null, null, LocalDateTime.now()
+				0, author, null, null, null, Instant.now().toEpochMilli()
 		);
 		
 		Post createdPost = postRepository.save(post);
@@ -51,48 +50,48 @@ public class PostService {
 	}
 	
 	@Transactional
-	public void upVotePost(UUID postId, UUID userId) {
+	public void upVotePost(String postId, String userId) {
 		VoteEvent event = new VoteEvent(ResourceType.POST, postId.toString(), userId.toString());
 		eventPublisher.publishUpVoteEvent(event);
 		postRepository.upVotePost(postId, userId);
 	}
 	
 	@Transactional
-	public void removeUpVotePost(UUID postId, UUID userId) {
+	public void removeUpVotePost(String postId, String userId) {
 		postRepository.removeUpVote(postId, userId);
 	}
 	
 	@Transactional
-	public void downVotePost(UUID postId, UUID userId) {
+	public void downVotePost(String postId, String userId) {
 		VoteEvent event = new VoteEvent(ResourceType.POST, postId.toString(), userId.toString());
 		postRepository.downVotePost(postId, userId);
 		eventPublisher.publishDownVoteEvent(event);
 	}
 	
 	@Transactional
-	public void removeDownVotePost(UUID postId, UUID userId) {
+	public void removeDownVotePost(String postId, String userId) {
 		postRepository.removeDownVote(postId, userId);
 	}
 	
 	@Transactional
-	public void addReplyToPost(UUID postId, UUID replyId) {
+	public void addReplyToPost(String postId, String replyId) {
 		postRepository.addReplyToPost(postId, replyId);
 	}
 	
 	@Transactional(readOnly = true)
-	public Post getPostById(UUID postId) {
+	public Post getPostById(String postId) {
 		log.info("Fetching Post with ID: {}", postId);
 		return postRepository.findById(postId).orElseThrow(() ->
 				new NotFoundException(String.format("Post with ID=%s not found", postId)));
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> getAllPostsByAuthor(UUID userId) {
+	public List<Post> getAllPostsByAuthor(String userId) {
 		return postRepository.findAllPostsByAuthor(userId);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> getAllPostsUserInteractedWith(UUID userId) {
+	public List<Post> getAllPostsUserInteractedWith(String userId) {
 		return postRepository.findAllPostsUserInteractedWith(userId);
 	}
 	
@@ -107,8 +106,14 @@ public class PostService {
 	}
 	
 	@Transactional
-	public void deletePost(UUID postId) {
+	public void deletePost(String postId) {
 		Post postToDelete = getPostById(postId);
 		postRepository.save(postToDelete.deletePost());
+	}
+	
+	@Transactional
+	public void deleteReplyFromPost(String postId, String replyId) {
+		Post post = getPostById(postId);
+		postRepository.removeReplyFromPost(postId, replyId);
 	}
 }

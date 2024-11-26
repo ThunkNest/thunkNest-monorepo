@@ -1,6 +1,5 @@
 package com.validate.monorepo.commonlibrary.model.post.mongo;
 
-import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
 import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,14 +15,11 @@ public record Post(
 		boolean isDeleted,
 		int upVoteCount,
 		int downVoteCount,
-		
 		User author,
 		
 		List<User> upvotedBy,
-		
 		List<User> downvotedBy,
-		
-		List<Reply> replies,
+		List<String> replies,
 		
 		long createdAt
 ) {
