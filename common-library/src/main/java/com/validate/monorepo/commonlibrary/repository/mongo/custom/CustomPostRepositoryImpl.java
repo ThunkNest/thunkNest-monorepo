@@ -23,27 +23,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 	}
 	
 	@Override
-	public List<User> findPostUpvotedUsers(String postId) {
-		Query query = new Query(Criteria.where("_id").is(postId));
-		Post post = mongoTemplate.findOne(query, Post.class);
-		return post != null ? post.upvotedBy() : List.of();
-	}
-	
-	@Override
-	public List<User> findPostDownvotedUsers(String postId) {
-		Query query = new Query(Criteria.where("_id").is(postId));
-		Post post = mongoTemplate.findOne(query, Post.class);
-		return post != null ? post.downvotedBy() : List.of();
-	}
-	
-	@Override
-	public List<String> findPostReplies(String postId) {
-		Query query = new Query(Criteria.where("_id").is(postId));
-		Post post = mongoTemplate.findOne(query, Post.class);
-		return post != null ? post.replies() : List.of();
-	}
-	
-	@Override
 	public void addReplyToPost(String postId, String replyId) {
 		Query query = new Query(Criteria.where("_id").is(postId));
 		Update update = new Update().push("replies", replyId);

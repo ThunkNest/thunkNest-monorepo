@@ -1,8 +1,6 @@
 package com.validate.monorepo.commonlibrary.model.user.mongo;
 
 import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
-import com.validate.monorepo.commonlibrary.model.vote.mongo.DownVote;
-import com.validate.monorepo.commonlibrary.model.vote.mongo.UpVote;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
