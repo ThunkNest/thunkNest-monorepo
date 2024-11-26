@@ -1,4 +1,4 @@
-db = db.getSiblingDB("ThunkNestDB");
+db = db.getSiblingDB("thunkNestDB");
 
 // Posts Collection Indexes
 db.posts.createIndex({ "author._id": 1 });

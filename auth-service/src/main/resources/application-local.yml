@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/thunkNestDB
+      uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/
       database: thunkNestDB
   neo4j:
     uri: neo4j+s://101fc5ab.databases.neo4j.io
