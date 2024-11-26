@@ -32,26 +32,6 @@ public class ReplyService {
 		this.userRepository = userRepository;
 	}
 	
-	@Transactional
-	public void upVoteReply(String replyId, String userId) {
-		replyRepository.upVoteReply(replyId, userId);
-	}
-	
-	@Transactional
-	public void removeUpVoteReply(String replyId, String userId) {
-		replyRepository.removeUpVoteReply(replyId, userId);
-	}
-	
-	@Transactional
-	public void downVoteReply(String replyId, String userId) {
-		replyRepository.downVoteReply(replyId, userId);
-	}
-	
-	@Transactional
-	public void removeDownVoteReply(String replyId, String userId) {
-		replyRepository.removeDownVoteReply(replyId, userId);
-	}
-	
 	@Transactional(readOnly = true)
 	public Reply getReplyById(String replyId) {
 		return replyRepository.findById(replyId).orElseThrow(() ->

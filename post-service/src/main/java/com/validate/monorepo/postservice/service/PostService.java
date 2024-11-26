@@ -35,11 +35,11 @@ public class PostService {
 	
 	@Transactional
 	public Post createPost(CreatePostRequest request) {
-		User author = userRepository.findById(request.authorId()).orElseThrow(() ->
+		User author = userRepository.findById(request.authorUserId()).orElseThrow(() ->
 				new BadRequestException("Author does not exist"));
 		
 		Post post = new Post(null, request.title(), request.description(), false, 0,
-				0, author, null, null, null, Instant.now().toEpochMilli()
+				0, request.openToCoFounder(), author, null, null, null, Instant.now().toEpochMilli()
 		);
 		
 		Post createdPost = postRepository.save(post);
@@ -47,30 +47,6 @@ public class PostService {
 		log.info("Post: {}", createdPost);
 		
 		return createdPost;
-	}
-	
-	@Transactional
-	public void upVotePost(String postId, String userId) {
-		VoteEvent event = new VoteEvent(ResourceType.POST, postId.toString(), userId.toString());
-		eventPublisher.publishUpVoteEvent(event);
-		postRepository.upVotePost(postId, userId);
-	}
-	
-	@Transactional
-	public void removeUpVotePost(String postId, String userId) {
-		postRepository.removeUpVote(postId, userId);
-	}
-	
-	@Transactional
-	public void downVotePost(String postId, String userId) {
-		VoteEvent event = new VoteEvent(ResourceType.POST, postId.toString(), userId.toString());
-		postRepository.downVotePost(postId, userId);
-		eventPublisher.publishDownVoteEvent(event);
-	}
-	
-	@Transactional
-	public void removeDownVotePost(String postId, String userId) {
-		postRepository.removeDownVote(postId, userId);
 	}
 	
 	@Transactional
