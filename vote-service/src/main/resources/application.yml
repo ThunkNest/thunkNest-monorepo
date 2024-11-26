@@ -1,0 +1,24 @@
+server:
+  port: ${PORT:2024}
+
+swagger:
+  title: "Vote Service API"
+  description: "API documentation for vote service"
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILE:local}
+  application:
+    name: user-service
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, info, refresh
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  api-docs:
+    path: /v3/api-docs
