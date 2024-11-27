@@ -71,7 +71,7 @@ public class PostController {
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(
 			summary = "Get all posts",
-			description = "Retrieve all posts.")
+			description = "Retrieve all posts. This endpoint excludes deleted posts.")
 	public List<Post> getAllPosts() {
 		return postService.getAllPosts();
 	}
