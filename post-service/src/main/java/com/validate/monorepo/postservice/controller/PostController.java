@@ -2,6 +2,7 @@ package com.validate.monorepo.postservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.post.PostRequest;
 import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
+import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class PostController {
 			summary = "Get post by ID",
 			description = "Retrieve a post by its unique ID even if the post is deleted.")
 	public Post getPostById(@PathVariable String postId) {
+		BlankUtils.validateBlank(postId);
 		return postService.getPostById(postId);
 	}
 	
@@ -45,6 +47,7 @@ public class PostController {
 			summary = "Update a post by ID",
 			description = "Update a post by its unique ID.")
 	public Post updatePostById(@PathVariable String postId, @RequestBody PostRequest request) {
+		BlankUtils.validateBlank(postId);
 		return postService.updatePost(postId, request);
 	}
 	
@@ -54,6 +57,7 @@ public class PostController {
 			summary = "Get all posts by author",
 			description = "Retrieve all posts created by a specific author.")
 	public List<Post> getAllPostsByAuthor(@PathVariable String userId) {
+		BlankUtils.validateBlank(userId);
 		return postService.getAllPostsByAuthor(userId);
 	}
 	
@@ -64,6 +68,7 @@ public class PostController {
 			description = "Retrieve all posts that a user has interacted with, including upvotes, downvotes, replies, and " +
 					"created posts. This endpoint excludes deleted posts.")
 	public List<Post> getAllPostsUserInteractedWith(@PathVariable String userId) {
+		BlankUtils.validateBlank(userId);
 		return postService.getAllPostsUserInteractedWith(userId);
 	}
 	
@@ -82,6 +87,7 @@ public class PostController {
 			summary = "Delete a post",
 			description = "Delete a post by its unique ID.")
 	public void deletePost(@PathVariable String postId) {
+		BlankUtils.validateBlank(postId);
 		postService.deletePost(postId);
 	}
 }

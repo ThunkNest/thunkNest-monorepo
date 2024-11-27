@@ -2,6 +2,7 @@ package com.validate.monorepo.postservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.reply.ReplyRequest;
 import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
+import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import com.validate.monorepo.postservice.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class ReplyController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "Add reply to a post", description = "Create a reply for a specific post by providing the post ID.")
 	public Reply replyToPost(@PathVariable String postId, @RequestBody ReplyRequest request) {
+		BlankUtils.validateBlank(postId);
 		return replyService.createReply(postId, request);
 	}
 	
@@ -39,6 +41,7 @@ public class ReplyController {
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Get reply by ID", description = "Retrieve a reply by its unique ID even if the reply is deleted.")
 	public Reply getReplyById(@PathVariable String replyId) {
+		BlankUtils.validateBlank(replyId);
 		return replyService.getReplyById(replyId);
 	}
 	
@@ -55,6 +58,7 @@ public class ReplyController {
 	@Operation(summary = "Get all replies user was tagged in", description = "Retrieve all replies a user was tagged in." +
 			"This endpoint does not include deleted replies")
 	public List<Reply> getAllRepliesUserWasTaggedIn(@PathVariable String userId) {
+		BlankUtils.validateBlank(userId);
 		return replyService.findRepliesByTaggedUserId(userId);
 	}
 	
@@ -62,6 +66,7 @@ public class ReplyController {
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Update a reply by ID", description = "Update a reply by its unique ID.")
 	public Reply updateReplyById(@PathVariable String replyId, @RequestBody ReplyRequest request) {
+		BlankUtils.validateBlank(replyId);
 		return replyService.editReply(replyId, request);
 	}
 	
@@ -69,6 +74,7 @@ public class ReplyController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Delete a reply", description = "Delete a reply by its unique ID.")
 	public void deleteReply(@PathVariable String replyId) {
+		BlankUtils.validateBlank(replyId);
 		replyService.deleteReply(replyId);
 	}
 
