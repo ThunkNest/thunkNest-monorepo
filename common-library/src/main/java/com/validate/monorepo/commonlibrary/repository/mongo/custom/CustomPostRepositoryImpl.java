@@ -70,7 +70,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 				.toList();
 		
 		// Step 2: Fetch parentPostIds from the replies collection
-		Query replyQuery = new Query(Criteria.where("author._id").is(userId));
+		Query replyQuery = new Query(Criteria.where("author._id").is(userId).and("isDeleted").is(false));
 		List<String> postIdsFromReplies = mongoTemplate.find(replyQuery, Reply.class).stream()
 				.map(Reply::parentPostId)
 				.distinct()
