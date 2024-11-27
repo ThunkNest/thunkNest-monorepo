@@ -2,7 +2,6 @@ package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
 import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
 import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
-import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import com.validate.monorepo.commonlibrary.model.vote.mongo.Vote;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
