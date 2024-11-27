@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import java.time.Instant;
 import java.util.List;
 
 public class CustomReplyRepositoryImpl implements CustomReplyRepository {
@@ -21,7 +22,7 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	}
 	
 	@Override
-	public Reply updateReply(String replyId, String newText, List<User> newTaggedUsers) {
+	public Reply editReply(String replyId, String newText, List<User> newTaggedUsers) {
 		// Find the reply by ID
 		Query query = new Query(Criteria.where("_id").is(replyId));
 		
@@ -29,7 +30,8 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 		Update update = new Update()
 				.set("text", newText)
 				.set("taggedUsers", newTaggedUsers)
-				.set("isEdited", true);
+				.set("isEdited", true)
+				.set("editedAt", Instant.now().toEpochMilli());
 		
 		return mongoTemplate.findAndModify(
 				query,
@@ -41,26 +43,14 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	
 	@Override
 	public List<Reply> findRepliesByTaggedUserId(String userId) {
-		return List.of();
+		Query query = new Query(Criteria.where("taggedUsers._id").is(userId).and("isDeleted").is(false));
+		return mongoTemplate.find(query, Reply.class);
 	}
 	
 	@Override
-	public void upVoteReply(String replyId, String userId) {
-	
+	public List<Reply> findAllRepliesAndIsDeletedFalse() {
+		Query query = new Query(Criteria.where("isDeleted").is(false));
+		return mongoTemplate.find(query, Reply.class);
 	}
 	
-	@Override
-	public void removeUpVoteReply(String replyId, String userId) {
-	
-	}
-	
-	@Override
-	public void downVoteReply(String replyId, String userId) {
-	
-	}
-	
-	@Override
-	public void removeDownVoteReply(String replyId, String userId) {
-	
-	}
 }

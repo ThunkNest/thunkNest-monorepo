@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,15 +42,18 @@ public class ReplyService {
 	
 	@Transactional(readOnly = true)
 	public List<Reply> getAllReplies() {
-		return replyRepository.findAll();
+		return replyRepository.findAllRepliesAndIsDeletedFalse();
 	}
 	
 	@Transactional
-	public Reply updateReply(String replyId, ReplyRequest request) {
-		getReplyById(replyId);
+	public Reply editReply(String replyId, ReplyRequest request) {
+		Reply replyToUpdate = getReplyById(replyId);
+		
+		if (replyToUpdate.isDeleted()) throw new BadRequestException("Cannot edit a deleted reply");
+		
 		String replyText = request.replyText();
 		
-		return replyRepository.updateReply(replyId, replyText, getMentionedUsersInReply(replyText));
+		return replyRepository.editReply(replyId, replyText, getMentionedUsersInReply(replyText));
 	}
 	
 	@Transactional
@@ -71,7 +72,7 @@ public class ReplyService {
 		
 		String replyText = request.replyText();
 		Reply reply = new Reply(null, replyText, 0, 0, author, postId,
-				getMentionedUsersInReply(replyText), false, Instant.now().toEpochMilli());
+				getMentionedUsersInReply(replyText), false, false, 0, Instant.now().toEpochMilli());
 		return replyRepository.save(reply);
 	}
 	
@@ -79,11 +80,15 @@ public class ReplyService {
 		return userRepository.findByUsername(username).orElse(null);
 	}
 	
+	public List<Reply> findRepliesByTaggedUserId(String userId) {
+		return replyRepository.findRepliesByTaggedUserId(userId);
+	}
+	
 	@Transactional
 	public void deleteReply(String replyId) {
 		Reply replyToDelete = getReplyById(replyId);
 		postService.deleteReplyFromPost(replyToDelete.parentPostId(), replyId);
-		replyRepository.deleteById(replyId);
+		replyRepository.save(replyToDelete.deleteReply());
 	}
 	
 	private List<User> getMentionedUsersInReply(String replyText) {

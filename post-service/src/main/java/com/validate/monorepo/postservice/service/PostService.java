@@ -2,7 +2,7 @@ package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.post.CreatePostRequest;
+import com.validate.monorepo.commonlibrary.model.post.PostRequest;
 import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
 import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import com.validate.monorepo.commonlibrary.rabbitmq.EventPublisher;
@@ -32,12 +32,13 @@ public class PostService {
 	}
 	
 	@Transactional
-	public Post createPost(CreatePostRequest request) {
+	public Post createPost(PostRequest request) {
 		User author = userRepository.findById(request.authorUserId()).orElseThrow(() ->
 				new BadRequestException("Author does not exist"));
 		
-		Post post = new Post(null, request.title(), request.description(), false, 0,
-				0, request.openToCoFounder(), author, null, Instant.now().toEpochMilli()
+		Post post = new Post(null, request.title(), request.description(), false, 0, false,
+				0, 0, 0, request.openToCoFounder(), author, null,
+				Instant.now().toEpochMilli()
 		);
 		
 		Post createdPost = postRepository.save(post);
@@ -59,6 +60,31 @@ public class PostService {
 				new NotFoundException(String.format("Post with ID=%s not found", postId)));
 	}
 	
+	@Transactional
+	public Post updatePost(String postId, PostRequest request) {
+		Post postToUpdate = getPostById(postId);
+		
+		if (postToUpdate.isDeleted()) throw new BadRequestException("A deleted post cannot be updated");
+		
+		Post updatedPost = new Post(
+				postToUpdate.id(),
+				postToUpdate.title(),
+				request.description() != null ? request.description() : postToUpdate.description(),
+				false,
+				postToUpdate.deletedAt(),
+				true,
+				Instant.now().toEpochMilli(),
+				postToUpdate.upVoteCount(),
+				postToUpdate.downVoteCount(),
+				request.openToCoFounder(),
+				postToUpdate.author(),
+				postToUpdate.replies(),
+				postToUpdate.createdAt()
+		);
+		
+		return postRepository.save(updatedPost);
+	}
+	
 	@Transactional(readOnly = true)
 	public List<Post> getAllPostsByAuthor(String userId) {
 		return postRepository.findAllPostsByAuthor(userId);
@@ -71,18 +97,13 @@ public class PostService {
 	
 	@Transactional(readOnly = true)
 	public List<Post> getAllPosts() {
-		return postRepository.findAll();
-	}
-	
-	@Transactional
-	public Post createPost(Post post) {
-		return postRepository.save(post);
+		return postRepository.findAllPostsAndIsDeletedFalse();
 	}
 	
 	@Transactional
 	public void deletePost(String postId) {
 		getPostById(postId);
-		postRepository.deleteById(postId);
+		postRepository.save(getPostById(postId).deletePost());
 	}
 	
 	@Transactional

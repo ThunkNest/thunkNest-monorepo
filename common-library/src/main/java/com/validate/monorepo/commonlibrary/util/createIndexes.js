@@ -2,9 +2,6 @@ db = db.getSiblingDB("thunkNestDB");
 
 // Posts Collection Indexes
 db.posts.createIndex({ "author._id": 1 });
-db.posts.createIndex({ "upvotedBy._id": 1 });
-db.posts.createIndex({ "downvotedBy._id": 1 });
-db.posts.createIndex({ "replies.author._id": 1 });
 
 // Users Collection Indexes
 db.users.createIndex({ "username": 1 });
@@ -12,6 +9,8 @@ db.users.createIndex({ "username": 1 });
 // Replies Collection Indexes
 db.replies.createIndex({ "taggedUsers._id": 1 });
 db.replies.createIndex({ "_id": 1 });
+db.replies.createIndex({ "parentPostId": 1 });
+db.replies.createIndex({ "author._id": 1, "parentPostId": 1 });
 
 // Votes Collection Indexes
 db.votes.createIndex({ "userId": 1 });
