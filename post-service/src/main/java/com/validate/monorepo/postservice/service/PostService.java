@@ -36,7 +36,7 @@ public class PostService {
 		User author = userRepository.findById(request.authorUserId()).orElseThrow(() ->
 				new BadRequestException("Author does not exist"));
 		
-		Post post = new Post(null, request.title(), request.description(), false, 0,
+		Post post = new Post(null, request.title(), request.description(), false, 0, 0,
 				0, request.openToCoFounder(), author, null, Instant.now().toEpochMilli()
 		);
 		
@@ -71,18 +71,13 @@ public class PostService {
 	
 	@Transactional(readOnly = true)
 	public List<Post> getAllPosts() {
-		return postRepository.findAll();
-	}
-	
-	@Transactional
-	public Post createPost(Post post) {
-		return postRepository.save(post);
+		return postRepository.findAllPostsAndIsDeletedFalse();
 	}
 	
 	@Transactional
 	public void deletePost(String postId) {
 		getPostById(postId);
-		postRepository.deleteById(postId);
+		postRepository.save(getPostById(postId).deletePost());
 	}
 	
 	@Transactional

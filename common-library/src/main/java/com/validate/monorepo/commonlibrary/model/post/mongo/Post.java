@@ -4,6 +4,7 @@ import com.validate.monorepo.commonlibrary.model.user.mongo.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
 import java.util.List;
 
 @Document(collection = "posts")
@@ -13,6 +14,7 @@ public record Post(
 		String title,
 		String description,
 		boolean isDeleted,
+		long deletedAt,
 		int upVoteCount,
 		int downVoteCount,
 		boolean openToCoFounder,
@@ -24,7 +26,8 @@ public record Post(
 ) {
 	
 	public Post deletePost() {
-		return new Post(id, title, description, true, upVoteCount, downVoteCount, openToCoFounder, author, replies, createdAt);
+		return new Post(id, title, description, true, Instant.now().toEpochMilli(), upVoteCount, downVoteCount,
+				openToCoFounder, author, replies, createdAt);
 	}
 
 }

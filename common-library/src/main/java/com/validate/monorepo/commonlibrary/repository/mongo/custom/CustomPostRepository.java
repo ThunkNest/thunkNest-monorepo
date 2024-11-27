@@ -8,7 +8,8 @@ public interface CustomPostRepository {
 	
 	void addReplyToPost(String postId, String replyId);
 	void removeReplyFromPost(String postId, String replyId);
+	List<Post> findAllPostsAndIsDeletedFalse();
 	List<Post> findAllPostsByAuthor(String userId);
 	List<Post> findAllPostsUserInteractedWith(String userId);
-
+	
 }

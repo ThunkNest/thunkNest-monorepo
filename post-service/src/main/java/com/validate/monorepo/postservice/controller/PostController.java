@@ -6,14 +6,7 @@ import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,7 +34,7 @@ public class PostController {
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(
 			summary = "Get post by ID",
-			description = "Retrieve a post by its unique ID.")
+			description = "Retrieve a post by its unique ID even if the post is deleted.")
 	public Post getPostById(@PathVariable String postId) {
 		return postService.getPostById(postId);
 	}
