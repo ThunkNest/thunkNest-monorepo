@@ -81,8 +81,8 @@ public class PostService {
 	
 	@Transactional
 	public void deletePost(String postId) {
-		Post postToDelete = getPostById(postId);
-		postRepository.save(postToDelete.deletePost());
+		getPostById(postId);
+		postRepository.deleteById(postId);
 	}
 	
 	@Transactional
