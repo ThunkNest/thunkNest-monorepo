@@ -15,6 +15,8 @@ public record Post(
 		String description,
 		boolean isDeleted,
 		long deletedAt,
+		boolean isUpdated,
+		long updatedAt,
 		int upVoteCount,
 		int downVoteCount,
 		boolean openToCoFounder,
@@ -26,8 +28,8 @@ public record Post(
 ) {
 	
 	public Post deletePost() {
-		return new Post(id, title, description, true, Instant.now().toEpochMilli(), upVoteCount, downVoteCount,
-				openToCoFounder, author, replies, createdAt);
+		return new Post(id, title, description, true, Instant.now().toEpochMilli(), isUpdated, updatedAt,
+				upVoteCount, downVoteCount, openToCoFounder, author, replies, createdAt);
 	}
 
 }

@@ -64,7 +64,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 		
 		// Step 1: Fetch post IDs from the votes collection
 		Query voteQuery = new Query(Criteria.where("userId").is(userId).and("postId").ne(null));
-		voteQuery.fields().include("postId");
 		List<String> postIdsFromVotes = mongoTemplate.find(voteQuery, Vote.class).stream()
 				.map(Vote::postId)
 				.distinct()
@@ -72,22 +71,29 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 		
 		// Step 2: Fetch parentPostIds from the replies collection
 		Query replyQuery = new Query(Criteria.where("author._id").is(userId));
-		replyQuery.fields().include("parentPostId");
 		List<String> postIdsFromReplies = mongoTemplate.find(replyQuery, Reply.class).stream()
 				.map(Reply::parentPostId)
 				.distinct()
 				.toList();
 		
-		// Step 3: Combine all post IDs
+		// Step 4: Fetch post IDs from the posts collection
+		Query postQuery = new Query(Criteria.where("author._id").is(userId));
+		List<String> postIdsFromPosts = mongoTemplate.find(replyQuery, Post.class).stream()
+				.map(Post::id)
+				.distinct()
+				.toList();
+		
+		// Step 4: Combine all post IDs
 		Set<String> allPostIds = new HashSet<>(postIdsFromVotes);
 		allPostIds.addAll(postIdsFromReplies);
+		allPostIds.addAll(postIdsFromPosts);
 		
 		if (allPostIds.isEmpty()) {
 			return List.of(); // Return an empty list if no interactions
 		}
 		
 		// Step 4: Fetch posts using the combined post IDs and exclude deleted ones
-		Query postQuery = new Query(Criteria.where("_id").in(allPostIds).and("isDeleted").is(false));
+		Query findPostsQuery = new Query(Criteria.where("_id").in(allPostIds).and("isDeleted").is(false));
 		return mongoTemplate.find(postQuery, Post.class);
 	}
 	
