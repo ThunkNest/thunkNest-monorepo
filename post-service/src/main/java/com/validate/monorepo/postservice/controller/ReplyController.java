@@ -37,23 +37,32 @@ public class ReplyController {
 	
 	@GetMapping("/{replyId}")
 	@ResponseStatus(HttpStatus.OK)
-	@Operation(summary = "Get reply by ID", description = "Retrieve a reply by its unique ID.")
+	@Operation(summary = "Get reply by ID", description = "Retrieve a reply by its unique ID even if the reply is deleted.")
 	public Reply getReplyById(@PathVariable String replyId) {
 		return replyService.getReplyById(replyId);
 	}
 	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	@Operation(summary = "Get all replies", description = "Retrieve all replies.")
+	@Operation(summary = "Get all replies", description = "Retrieve all replies. This endpoint does not include deleted" +
+			" replies")
 	public List<Reply> getAllReplies() {
 		return replyService.getAllReplies();
+	}
+	
+	@GetMapping("/tagged/{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "Get all replies user was tagged in", description = "Retrieve all replies a user was tagged in." +
+			"This endpoint does not include deleted replies")
+	public List<Reply> getAllRepliesUserWasTaggedIn(@PathVariable String userId) {
+		return replyService.findRepliesByTaggedUserId(userId);
 	}
 	
 	@PostMapping("/{replyId}")
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Update a reply by ID", description = "Update a reply by its unique ID.")
 	public Reply updateReplyById(@PathVariable String replyId, @RequestBody ReplyRequest request) {
-		return replyService.updateReply(replyId, request);
+		return replyService.editReply(replyId, request);
 	}
 	
 	@DeleteMapping("/{replyId}")
