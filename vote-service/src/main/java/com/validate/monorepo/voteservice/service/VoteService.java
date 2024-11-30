@@ -46,7 +46,7 @@ public class VoteService {
 		verifyValuesExist(request);
 		
 		Vote removedVote = voteRepository.removeVote(request.voterUserId(), request.postId(), request.replyId());
-		VoteRequest removeVoteRequest = new VoteRequest(removedVote.voteType(), request.postId(), request.replyId(), request.voterUserId());
+		VoteRequest removeVoteRequest = new VoteRequest(removedVote.voteType(), request.postId(), request.replyId(), request.voterUserId(), true);
 		eventPublisher.publishVoteEvent(generateEvent(removeVoteRequest));
 	}
 	
