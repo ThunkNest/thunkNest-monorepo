@@ -1,6 +1,7 @@
 package com.validate.monorepo.userservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import com.validate.monorepo.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class UserController {
 	@GetMapping("/get-by-email/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public User getUserByEmail(@PathVariable String email) {
+		BlankUtils.validateBlank(email);
 		return userService.getUserByEmail(email);
 	}
 	
@@ -38,6 +40,7 @@ public class UserController {
 	@GetMapping("/get-by-id/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public User getUserById(@PathVariable String id) {
+		BlankUtils.validateBlank(id);
 		return userService.getUserById(id);
 	}
 	
@@ -47,6 +50,7 @@ public class UserController {
 	@GetMapping("/get-by-username/{username}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public User getUserByUsername(@PathVariable String username) {
+		BlankUtils.validateBlank(username);
 		return userService.getUserByUsername(username);
 	}
 
@@ -63,6 +67,7 @@ public class UserController {
 	@GetMapping("/search/{fragment}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<User> searchForUsers(@PathVariable String fragment) {
+		BlankUtils.validateBlank(fragment);
 		return userService.searchUsers(fragment);
 	}
 	
@@ -72,6 +77,7 @@ public class UserController {
 	@DeleteMapping("/delete-by-id/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteUserById(@PathVariable String id) {
+		BlankUtils.validateBlank(id);
 		userService.deleteUserById(id);
 	}
 	

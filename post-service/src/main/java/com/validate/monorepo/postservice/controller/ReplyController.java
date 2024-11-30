@@ -45,6 +45,22 @@ public class ReplyController {
 		return replyService.getReplyById(replyId);
 	}
 	
+	@GetMapping("/post{postId}/replies")
+	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "Get replies to a post given it's ID", description = "Retrieve replies to a post by its unique ID." +
+			"This endpoint does not return deleted replies")
+	public List<Reply> getRepliesByPostId(@PathVariable String replyId) {
+		BlankUtils.validateBlank(replyId);
+		return replyService.getRepliesByPostId(replyId);
+	}
+	
+	@PostMapping("/")
+	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "Get replies by their IDs", description = "Retrieve replies by their unique IDs even if the replies are deleted.")
+	public List<Reply> getReplyById(@RequestBody List<String> replyIds) {
+		return replyService.getRepliesByIds(replyIds);
+	}
+	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Get all replies", description = "Retrieve all replies. This endpoint does not include deleted" +
