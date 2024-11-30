@@ -104,4 +104,18 @@ public class CustomVoteRepositoryImpl implements CustomVoteRepository {
 				.map(vote -> vote.postId() != null ? vote.postId() : vote.replyId())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<Vote> findVotesByUserIdAndPostIds(String userId, List<String> postIds) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("userId").is(userId).and("postId").in(postIds));
+		return mongoTemplate.find(query, Vote.class);
+	}
+	
+	@Override
+	public List<Vote> findVotesByUserIdAndReplyIds(String userId, List<String> replyIds) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("userId").is(userId).and("replyId").in(replyIds));
+		return mongoTemplate.find(query, Vote.class);
+	}
 }

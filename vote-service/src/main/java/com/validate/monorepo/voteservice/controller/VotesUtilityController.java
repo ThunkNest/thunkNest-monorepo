@@ -3,13 +3,10 @@ package com.validate.monorepo.voteservice.controller;
 import com.validate.monorepo.commonlibrary.model.vote.VoteType;
 import com.validate.monorepo.voteservice.service.VoteUtilityService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/votes/utility")
@@ -68,6 +65,28 @@ public class VotesUtilityController {
 	)
 	public List<String> findVotesByUserAndVoteType(@PathVariable String userId, @PathVariable VoteType voteType) {
 		return service.findVotesByUserAndVoteType(userId, voteType);
+	}
+	
+	@PostMapping("/{userId}/has-voted/posts")
+	@Operation(
+			summary = "Get posts and see whether a user UPVOTED or DOWNVOTED them.",
+			description = "Checks all the posts provided in the request for user UPVOTE or DOWNVOTE. There is a limit of 50"
+	)
+	public Map<String, VoteType> getVotesForPosts(
+			@PathVariable String userId,
+			@RequestBody List<String> postIds) {
+		return service.getVotesForPosts(userId, postIds);
+	}
+	
+	@PostMapping("/{userId}/has-voted/replies")
+	@Operation(
+			summary = "Get replies and see whether a user UPVOTED or DOWNVOTED them.",
+			description = "Checks all the replies provided in the request for user UPVOTE or DOWNVOTE. There is a limit of 50"
+	)
+	public Map<String, VoteType> getVotesForReplies(
+			@PathVariable String userId,
+			@RequestBody List<String> replyIds) {
+		return service.getVotesForReplies(userId, replyIds);
 	}
 	
 }

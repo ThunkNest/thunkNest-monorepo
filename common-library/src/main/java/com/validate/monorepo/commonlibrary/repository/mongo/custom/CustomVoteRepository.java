@@ -14,5 +14,7 @@ public interface CustomVoteRepository {
 	boolean hasUserVoted(String userId, String postId, String replyId);
 	List<String> findAllVotesByUser(String userId);
 	List<String> findVotesByUserAndVoteType(String userId, VoteType voteType);
+	List<Vote> findVotesByUserIdAndPostIds(String userId, List<String> postIds);
+	List<Vote> findVotesByUserIdAndReplyIds(String userId, List<String> replyIds);
 	
 }
