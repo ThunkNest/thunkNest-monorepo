@@ -4,15 +4,3 @@ spring:
       uri: mongodb+srv://javaServiceUser:J1KOomWoId30LtuK@cluster0.7xfaek8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       database: thunkNestDB
 
-web:
-  client:
-    auth-service:
-      baseUrl: http://localhost:2020
-    post-service:
-      baseUrl: http://localhost:2021
-    reputation-service:
-      baseUrl: http://localhost:2023
-    user-service:
-      baseUrl: http://localhost:2022
-    vote-service:
-      baseUrl: http://localhost:2024
