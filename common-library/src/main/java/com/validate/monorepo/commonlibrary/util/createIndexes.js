@@ -22,4 +22,9 @@ db.votes.createIndex({ "replyId": 1, "voteType": 1 });
 db.votes.createIndex({ "userId": 1, "postId": 1 }, { unique: true });
 db.votes.createIndex({ "userId": 1, "replyId": 1 }, { unique: true });
 
+// ReputationChange Collection Indexes
+db.reputationChange.createIndex({ "timestamp": 1 });
+db.reputationChange.createIndex({ "user.id": 1, "postId": 1 });
+db.reputationChange.createIndex({ "user.id": 1, "replyId": 1 });
+
 print("Indexes created successfully!");

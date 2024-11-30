@@ -9,6 +9,8 @@ public record ReputationChange(
 		@Id
 		String id,
 		User user,
+		String postId,
+		String replyId,
 		int pointsChanged,
 		long timestamp
 ) {
