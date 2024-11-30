@@ -125,11 +125,11 @@ public class ReplyService {
 		return userRepository.findAllByUsernameIn(taggedUsernames);
 	}
 	
-	public void handleVote(String postId) {
-		long upVoteCount = voteRepository.countVotesByPost(postId, VoteType.UPVOTE);
-		long downVoteCount = voteRepository.countVotesByPost(postId, VoteType.DOWNVOTE);
+	public void handleVote(String replyId) {
+		long upVoteCount = voteRepository.countVotesByReply(replyId, VoteType.UPVOTE);
+		long downVoteCount = voteRepository.countVotesByReply(replyId, VoteType.DOWNVOTE);
 		
-		replyRepository.updateVoteCount(postId, upVoteCount, downVoteCount);
+		replyRepository.updateVoteCount(replyId, upVoteCount, downVoteCount);
 	}
 	
 }
