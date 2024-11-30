@@ -16,20 +16,5 @@ public record User(
 		String phoneNumber,
 		long createdAt
 ) {
-	
-	public User upVoteReputationIncrease() {
-		return new User(id, username, oauthProvider, providerId, reputationScore + 3, email, phoneNumber,
-				createdAt);
-	}
-	
-	public User upVoteReputationIncreaseFromAuthor() {
-		return new User(id, username, oauthProvider, providerId, reputationScore + 5, email, phoneNumber,
-				createdAt);
-	}
-	
-	public User downVoteReputationDecrease() {
-		return new User(id, username, oauthProvider, providerId, reputationScore - 1, email, phoneNumber,
-				createdAt);
-	}
-	
+
 }

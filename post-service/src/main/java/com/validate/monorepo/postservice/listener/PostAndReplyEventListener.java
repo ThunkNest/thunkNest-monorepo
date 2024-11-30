@@ -10,25 +10,25 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class VoteEventListener {
+public class PostAndReplyEventListener {
 	
 	private final PostService postService;
 	private final ReplyService replyService;
 	
-	public VoteEventListener(PostService postService, ReplyService replyService) {
+	public PostAndReplyEventListener(PostService postService, ReplyService replyService) {
 		this.postService = postService;
 		this.replyService = replyService;
 	}
 	
-	@RabbitListener(queues = "q.upVotes")
+	@RabbitListener(queues = "q.postAndReply.upVotes")
 	public void handleUpVote(EventMessage<VoteRequest> eventMessage) {
-		log.info("UserService received UPVOTE: {}", eventMessage);
+		log.info("PostAndReplyEventListener: received UPVOTE: {}", eventMessage);
 		doVoting(eventMessage);
 	}
 	
-	@RabbitListener(queues = "q.downVotes")
+	@RabbitListener(queues = "q.postAndReply.downVotes")
 	public void handleDownVote(EventMessage<VoteRequest> eventMessage) {
-		log.info("UserService received DOWNVOTE: {}", eventMessage);
+		log.info("PostAndReplyEventListener: received DOWNVOTE: {}", eventMessage);
 		doVoting(eventMessage);
 	}
 	

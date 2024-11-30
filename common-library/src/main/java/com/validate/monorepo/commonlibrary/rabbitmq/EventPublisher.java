@@ -8,9 +8,6 @@ import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.UUID;
-
 @Slf4j
 @Component
 public class EventPublisher {
@@ -28,7 +25,7 @@ public class EventPublisher {
 		switch (payload.action()) {
 			case UPVOTE -> {
 				try {
-					rabbitTemplate.convertAndSend("x.upVotes", "upVotes.#", eventMessage);
+					rabbitTemplate.convertAndSend("x.upVotes", "", eventMessage);
 				} catch (AmqpException ex) {
 					log.error("Failed to publish message to RabbitMQ", ex);
 					throw new RabbitPublisherException("Failed to publish vote event", ex);
@@ -36,29 +33,13 @@ public class EventPublisher {
 			}
 			case DOWNVOTE -> {
 				try {
-					rabbitTemplate.convertAndSend("x.downVotes", "downVotes.#", eventMessage);
+					rabbitTemplate.convertAndSend("x.downVotes", "", eventMessage);
 				} catch (AmqpException ex) {
 					log.error("Failed to publish message to RabbitMQ", ex);
 					throw new RabbitPublisherException("Failed to publish vote event", ex);
 				}
 			}
 			default -> throw new IllegalArgumentException("Invalid vote action provided");
-		}
-	}
-	
-	public void publishMatchEvent2(Object match) {
-		log.info("publishMatchEvent: Attempting to publish a match event");
-		EventMessage<Object> message = new EventMessage<>(
-				UUID.randomUUID().toString(),
-				match,
-				Instant.now().toEpochMilli()
-		);
-		
-		try {
-			rabbitTemplate.convertAndSend("", "q.user-matches", message);
-		} catch (Exception e) {
-			log.error("publishMatchEvent: Error publishing match event.");
-			throw new RabbitPublisherException("Error publishing match event: ", e);
 		}
 	}
 	

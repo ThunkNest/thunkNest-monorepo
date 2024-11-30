@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,4 +44,37 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
 		query.limit(10); // Limit to 10 results
 		return mongoTemplate.find(query, User.class);
 	}
+	
+	@Override
+	public void upvoteReputationIncrease(String userId) {
+		Query query = new Query(Criteria.where("_id").is(userId));
+		Update update = new Update().inc("reputationScore", 3);
+		
+		mongoTemplate.updateFirst(query, update, User.class);
+	}
+	
+	@Override
+	public void removeUpvoteReputationIncrease(String userId) {
+		Query query = new Query(Criteria.where("_id").is(userId));
+		Update update = new Update().inc("reputationScore", -3);
+		
+		mongoTemplate.updateFirst(query, update, User.class);
+	}
+	
+	@Override
+	public void downVoteReputationDecrease(String userId) {
+		Query query = new Query(Criteria.where("_id").is(userId));
+		Update update = new Update().inc("reputationScore", -1);
+		
+		mongoTemplate.updateFirst(query, update, User.class);
+	}
+	
+	@Override
+	public void removeDownVoteReputationDecrease(String userId) {
+		Query query = new Query(Criteria.where("_id").is(userId));
+		Update update = new Update().inc("reputationScore", 1);
+		
+		mongoTemplate.updateFirst(query, update, User.class);
+	}
+	
 }
