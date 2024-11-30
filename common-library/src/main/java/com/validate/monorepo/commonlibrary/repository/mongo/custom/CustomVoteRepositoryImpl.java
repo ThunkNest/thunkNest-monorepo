@@ -45,7 +45,7 @@ public class CustomVoteRepositoryImpl implements CustomVoteRepository {
 	}
 	
 	@Override
-	public void removeVote(String userId, String postId, String replyId) {
+	public Vote removeVote(String userId, String postId, String replyId) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("userId").is(userId));
 		
@@ -55,7 +55,10 @@ public class CustomVoteRepositoryImpl implements CustomVoteRepository {
 			query.addCriteria(Criteria.where("replyId").is(replyId));
 		}
 		
+		Vote deletedVote = mongoTemplate.find(query, Vote.class).get(0);
+		
 		mongoTemplate.remove(query, Vote.class);
+		return deletedVote;
 	}
 	
 	@Override

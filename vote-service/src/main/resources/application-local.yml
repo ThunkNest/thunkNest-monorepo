@@ -1,5 +1,18 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/thunkNestDB
+      uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/?retryWrites=true&w=majority&appName=ThunkNestDB
       database: thunkNestDB
+
+web:
+  client:
+    auth-service:
+      baseUrl: http://localhost:2020
+    post-service:
+      baseUrl: http://localhost:2021
+    reputation-service:
+      baseUrl: http://localhost:2023
+    user-service:
+      baseUrl: http://localhost:2022
+    vote-service:
+      baseUrl: http://localhost:2024
