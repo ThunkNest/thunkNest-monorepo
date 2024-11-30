@@ -45,6 +45,17 @@ public class ReplyService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Reply> getRepliesByPostId(String postId) {
+		List<String> replyIds = postService.getPostById(postId).replies();
+		return getRepliesByIds(replyIds);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Reply> getRepliesByIds(List<String> replyIds) {
+		return replyRepository.findAllById(replyIds);
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Reply> getAllReplies() {
 		return replyRepository.findAllRepliesAndIsDeletedFalse();
 	}
