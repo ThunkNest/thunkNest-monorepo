@@ -2,7 +2,6 @@ package com.validate.monorepo.reputationservice.listener;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.model.ampq.EventMessage;
-import com.validate.monorepo.commonlibrary.model.event.VoteEvent;
 import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.vote.VoteRequest;
