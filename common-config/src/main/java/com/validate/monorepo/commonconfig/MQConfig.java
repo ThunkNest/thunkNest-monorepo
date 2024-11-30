@@ -5,6 +5,7 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ public class MQConfig {
 	
 	@Bean
 	public TopicExchange upVoteExchange() {
-		return new TopicExchange("x.upVotes");
+		return new TopicExchange("x.upVotes", true, false);
 	}
 	
 	@Bean
@@ -35,7 +36,7 @@ public class MQConfig {
 	
 	@Bean
 	public TopicExchange downVoteExchange() {
-		return new TopicExchange("x.downVotes");
+		return new TopicExchange("x.downVotes", true, false);
 	}
 	
 	@Bean
@@ -61,6 +62,11 @@ public class MQConfig {
 	@Bean
 	public Binding downVoteDLQBinding() {
 		return BindingBuilder.bind(upVoteDLQ()).to(upVoteExchange()).with("downVotes.dlq");
+	}
+	
+	@Bean
+	public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+		return new RabbitAdmin(connectionFactory);
 	}
 	
 	@Bean

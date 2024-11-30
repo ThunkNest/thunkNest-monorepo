@@ -3,3 +3,10 @@ spring:
     mongodb:
       uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/
       database: thunkNestDB
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+

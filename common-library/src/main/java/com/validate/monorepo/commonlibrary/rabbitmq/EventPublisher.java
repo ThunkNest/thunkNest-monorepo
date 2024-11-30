@@ -28,7 +28,7 @@ public class EventPublisher {
 		switch (payload.action()) {
 			case UPVOTE -> {
 				try {
-					rabbitTemplate.convertAndSend("x.upVote", "upVotes.#", payload);
+					rabbitTemplate.convertAndSend("x.upVotes", "upVotes.#", payload);
 				} catch (AmqpException ex) {
 					log.error("Failed to publish message to RabbitMQ", ex);
 					throw new RabbitPublisherException("Failed to publish vote event", ex);
@@ -36,7 +36,7 @@ public class EventPublisher {
 			}
 			case DOWNVOTE -> {
 				try {
-					rabbitTemplate.convertAndSend("x.downVote", "downVotes.#", payload);
+					rabbitTemplate.convertAndSend("x.downVotes", "downVotes.#", payload);
 				} catch (AmqpException ex) {
 					log.error("Failed to publish message to RabbitMQ", ex);
 					throw new RabbitPublisherException("Failed to publish vote event", ex);
