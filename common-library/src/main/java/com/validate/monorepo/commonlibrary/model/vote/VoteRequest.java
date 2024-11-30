@@ -1,4 +1,4 @@
-package com.validate.monorepo.commonlibrary.model.vote.mongo;
+package com.validate.monorepo.commonlibrary.model.vote;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 

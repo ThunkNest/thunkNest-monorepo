@@ -1,4 +1,4 @@
-package com.validate.monorepo.commonlibrary.model.user.mongo;
+package com.validate.monorepo.commonlibrary.model.user;
 
 import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import org.springframework.data.annotation.Id;

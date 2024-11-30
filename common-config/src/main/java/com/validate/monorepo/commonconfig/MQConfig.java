@@ -44,6 +44,26 @@ public class MQConfig {
 	}
 	
 	@Bean
+	public Queue upVoteDLQ() {
+		return new Queue("q.upVotes.dlq", true);
+	}
+	
+	@Bean
+	public Binding upVoteDLQBinding() {
+		return BindingBuilder.bind(upVoteDLQ()).to(upVoteExchange()).with("upVotes.dlq");
+	}
+	
+	@Bean
+	public Queue downVoteDLQ() {
+		return new Queue("q.downVotes.dlq", true);
+	}
+	
+	@Bean
+	public Binding downVoteDLQBinding() {
+		return BindingBuilder.bind(upVoteDLQ()).to(upVoteExchange()).with("downVotes.dlq");
+	}
+	
+	@Bean
 	public Jackson2JsonMessageConverter messageConverter() {
 		return new Jackson2JsonMessageConverter();
 	}

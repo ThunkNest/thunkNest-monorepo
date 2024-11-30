@@ -1,6 +1,6 @@
 package com.validate.monorepo.voteservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.vote.mongo.VoteType;
+import com.validate.monorepo.commonlibrary.model.vote.VoteType;
 import com.validate.monorepo.voteservice.service.VoteUtilityService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.GetMapping;

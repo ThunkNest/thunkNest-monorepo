@@ -1,6 +1,6 @@
 package com.validate.monorepo.userservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.user.mongo.User;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;

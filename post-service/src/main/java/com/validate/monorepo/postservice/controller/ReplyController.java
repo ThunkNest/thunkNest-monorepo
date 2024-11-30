@@ -1,7 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.reply.ReplyRequest;
-import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import com.validate.monorepo.postservice.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,8 +1,8 @@
 package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
-import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
-import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
-import com.validate.monorepo.commonlibrary.model.vote.mongo.Vote;
+import com.validate.monorepo.commonlibrary.model.post.Post;
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.vote.Vote;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

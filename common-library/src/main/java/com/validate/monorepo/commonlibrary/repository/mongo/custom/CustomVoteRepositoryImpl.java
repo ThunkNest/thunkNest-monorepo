@@ -1,7 +1,7 @@
 package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
-import com.validate.monorepo.commonlibrary.model.vote.mongo.Vote;
-import com.validate.monorepo.commonlibrary.model.vote.mongo.VoteType;
+import com.validate.monorepo.commonlibrary.model.vote.Vote;
+import com.validate.monorepo.commonlibrary.model.vote.VoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

@@ -7,7 +7,7 @@ swagger:
 
 spring:
   profiles:
-    active: ${SPRING_PROFILE:dev}
+    active: ${SPRING_PROFILE:local}
   application:
     name: reputation-service
   management:

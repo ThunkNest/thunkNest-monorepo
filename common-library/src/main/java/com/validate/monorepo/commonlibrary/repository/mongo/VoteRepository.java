@@ -1,6 +1,6 @@
 package com.validate.monorepo.commonlibrary.repository.mongo;
 
-import com.validate.monorepo.commonlibrary.model.vote.mongo.Vote;
+import com.validate.monorepo.commonlibrary.model.vote.Vote;
 import com.validate.monorepo.commonlibrary.repository.mongo.custom.CustomVoteRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

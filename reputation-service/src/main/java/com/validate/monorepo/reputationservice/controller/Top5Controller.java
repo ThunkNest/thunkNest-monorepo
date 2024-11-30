@@ -1,6 +1,5 @@
 package com.validate.monorepo.reputationservice.controller;
 
-import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
 import com.validate.monorepo.reputationservice.service.ReputationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
