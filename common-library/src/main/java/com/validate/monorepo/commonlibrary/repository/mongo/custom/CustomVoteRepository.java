@@ -1,6 +1,6 @@
 package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
-import com.validate.monorepo.commonlibrary.model.vote.mongo.VoteType;
+import com.validate.monorepo.commonlibrary.model.vote.VoteType;
 
 import java.util.List;
 

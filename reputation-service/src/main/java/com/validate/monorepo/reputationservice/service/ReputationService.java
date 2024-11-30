@@ -1,13 +1,6 @@
 package com.validate.monorepo.reputationservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.post.neo4j.Post;
-import com.validate.monorepo.commonlibrary.model.reply.neo4j.Reply;
-import com.validate.monorepo.commonlibrary.model.reputation.neo4j.ReputationChange;
-import com.validate.monorepo.commonlibrary.model.user.neo4j.User;
-import com.validate.monorepo.commonlibrary.repository.neo4j.ReplyRepository;
-import com.validate.monorepo.commonlibrary.repository.neo4j.ReputationRepository;
-import com.validate.monorepo.commonlibrary.repository.neo4j.UserRepository;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,19 +15,9 @@ import java.util.UUID;
 @Service
 public class ReputationService {
 	
-	private final UserRepository userRepository;
-	private final ReplyRepository replyRepository;
-	private final ReputationRepository reputationRepository;
 	private final CacheManager cacheManager;
 	
 	private static final String TOP_USERS_CACHE = "topUsers";
-	
-	public ReputationService(UserRepository userRepository, ReplyRepository replyRepository, ReputationRepository reputationRepository, CacheManager cacheManager) {
-		this.userRepository = userRepository;
-		this.replyRepository = replyRepository;
-		this.reputationRepository = reputationRepository;
-		this.cacheManager = cacheManager;
-	}
 	
 	public void postUpVote(String postId, String voterId) {
 		// do nothing

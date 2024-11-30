@@ -1,7 +1,7 @@
 package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
-import com.validate.monorepo.commonlibrary.model.reply.mongo.Reply;
-import com.validate.monorepo.commonlibrary.model.user.mongo.User;
+import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.user.User;
 
 import java.util.List;
 

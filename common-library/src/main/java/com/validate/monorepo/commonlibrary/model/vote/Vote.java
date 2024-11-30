@@ -1,4 +1,4 @@
-package com.validate.monorepo.commonlibrary.model.vote.mongo;
+package com.validate.monorepo.commonlibrary.model.vote;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

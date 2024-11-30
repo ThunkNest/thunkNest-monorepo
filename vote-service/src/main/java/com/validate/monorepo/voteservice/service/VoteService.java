@@ -1,6 +1,6 @@
 package com.validate.monorepo.voteservice.service;
 
-import com.validate.monorepo.commonlibrary.model.vote.mongo.VoteRequest;
+import com.validate.monorepo.commonlibrary.model.vote.VoteRequest;
 import com.validate.monorepo.commonlibrary.repository.mongo.VoteRepository;
 import org.springframework.stereotype.Service;
 

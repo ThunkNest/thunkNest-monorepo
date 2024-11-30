@@ -1,7 +1,7 @@
 package com.validate.monorepo.userservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
-import com.validate.monorepo.commonlibrary.model.user.mongo.User;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
 import org.springframework.stereotype.Service;
 

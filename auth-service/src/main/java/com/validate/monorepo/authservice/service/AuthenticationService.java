@@ -3,7 +3,7 @@ package com.validate.monorepo.authservice.service;
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.model.auth.OauthProvider;
 import com.validate.monorepo.commonlibrary.model.auth.UserAuthRequest;
-import com.validate.monorepo.commonlibrary.model.user.mongo.User;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
 import com.validate.monorepo.commonlibrary.util.EmailUtils;
 import lombok.extern.slf4j.Slf4j;

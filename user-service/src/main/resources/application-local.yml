@@ -3,8 +3,3 @@ spring:
     mongodb:
       uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/
       database: thunkNestDB
-  neo4j:
-    uri: neo4j+s://101fc5ab.databases.neo4j.io
-    authentication:
-      username: neo4j
-      password: cVdXhk479zP8DG8E1XEIgQd0urZt53JQTBB9w7IqC_4

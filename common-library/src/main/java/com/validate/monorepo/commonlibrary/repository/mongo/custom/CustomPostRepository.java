@@ -1,6 +1,6 @@
 package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
-import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
+import com.validate.monorepo.commonlibrary.model.post.Post;
 
 import java.util.List;
 

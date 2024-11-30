@@ -1,7 +1,7 @@
 package com.validate.monorepo.postservice.controller;
 
 import com.validate.monorepo.commonlibrary.model.post.PostRequest;
-import com.validate.monorepo.commonlibrary.model.post.mongo.Post;
+import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
