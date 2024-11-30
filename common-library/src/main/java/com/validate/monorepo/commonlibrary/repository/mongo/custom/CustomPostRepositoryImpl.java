@@ -5,10 +5,13 @@ import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.vote.Vote;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -49,22 +52,26 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 	}
 	
 	@Override
-	public List<Post> findAllPostsAndIsDeletedFalse() {
+	public Page<Post> findAllPostsAndIsDeletedFalse(Pageable pageable) {
 		Query query = new Query(Criteria.where("isDeleted").is(false));
-		return mongoTemplate.find(query, Post.class);
+		List<Post> posts = mongoTemplate.find(query, Post.class);
+		long total = mongoTemplate.count(query.skip(-1).limit(-1), Post.class);
+		return PageableExecutionUtils.getPage(posts, pageable, () -> total);
 	}
 	
 	@Override
-	public List<Post> findAllPostsByAuthor(String userId) {
+	public Page<Post> findAllPostsByAuthor(String userId, Pageable pageable) {
 		Query query = new Query(Criteria.where("author._id").is(userId).and("isDeleted").is(false));
-		return mongoTemplate.find(query, Post.class);
+		List<Post> posts = mongoTemplate.find(query, Post.class);
+		long total = mongoTemplate.count(query.skip(-1).limit(-1), Post.class);
+		return PageableExecutionUtils.getPage(posts, pageable, () -> total);
 	}
 	
 	@Override
-	public List<Post> findAllPostsUserInteractedWith(String userId) {
+	public Page<Post> findAllPostsUserInteractedWith(String userId, Pageable pageable) {
 		if (userId == null || userId.isEmpty()) {
 			log.warn("findAllPostsUserInteractedWith: userId is null or empty");
-			return List.of(); // Return an empty list for invalid input
+			return Page.empty(); // Return an empty list for invalid input
 		}
 		
 		// Step 1: Fetch post IDs from the votes collection
@@ -94,12 +101,14 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 		allPostIds.addAll(postIdsFromPosts);
 		
 		if (allPostIds.isEmpty()) {
-			return List.of(); // Return an empty list if no interactions
+			return Page.empty(); // Return an empty list if no interactions
 		}
 		
 		// Step 4: Fetch posts using the combined post IDs and exclude deleted ones
-		Query findPostsQuery = new Query(Criteria.where("_id").in(allPostIds).and("isDeleted").is(false));
-		return mongoTemplate.find(postQuery, Post.class);
+		Query findPostsQuery = new Query(Criteria.where("_id").in(allPostIds).and("isDeleted").is(false)).with(pageable);
+		List<Post> posts = mongoTemplate.find(findPostsQuery, Post.class);
+		long total = mongoTemplate.count(findPostsQuery.skip(-1).limit(-1), Post.class);
+		return PageableExecutionUtils.getPage(posts, pageable, () -> total);
 	}
 	
 }
