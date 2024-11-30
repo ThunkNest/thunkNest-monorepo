@@ -1,6 +1,5 @@
 package com.validate.monorepo.voteservice.service;
 
-import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.model.vote.Vote;
 import com.validate.monorepo.commonlibrary.model.vote.VoteType;
 import com.validate.monorepo.commonlibrary.repository.mongo.VoteRepository;

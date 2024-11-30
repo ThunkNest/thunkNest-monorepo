@@ -36,7 +36,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 	@Override
 	public void removeReplyFromPost(String postId, String replyId) {
 		Query query = new Query(Criteria.where("_id").is(postId));
-		Update update = new Update().pull("replies", Query.query(Criteria.where("_id").is(replyId)));
+		Update update = new Update().pull("replies", replyId);
 		// Perform the update operation
 		mongoTemplate.updateFirst(query, update, Post.class);
 	}
