@@ -20,7 +20,8 @@ public record VoteRequest(
 		VoteType action,
 		String postId,
 		String replyId,
-		String voterUserId
+		String voterUserId,
+		boolean isRemoval
 ) {
 	
 	/**

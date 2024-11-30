@@ -1,5 +1,6 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/
+      uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/?retryWrites=true&w=majority&appName=ThunkNestDB
       database: thunkNestDB
+

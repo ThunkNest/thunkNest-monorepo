@@ -42,6 +42,13 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 	}
 	
 	@Override
+	public void updateVoteCount(String postId, long upVoteCount, long downVoteCount) {
+		Query query = new Query(Criteria.where("_id").is(postId));
+		Update update = new Update().set("upVoteCount", upVoteCount).set("downVoteCount", downVoteCount);
+		mongoTemplate.updateFirst(query, update, Post.class);
+	}
+	
+	@Override
 	public List<Post> findAllPostsAndIsDeletedFalse() {
 		Query query = new Query(Criteria.where("isDeleted").is(false));
 		return mongoTemplate.find(query, Post.class);

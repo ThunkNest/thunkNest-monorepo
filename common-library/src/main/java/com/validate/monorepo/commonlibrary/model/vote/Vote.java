@@ -10,6 +10,6 @@ public record Vote(
 		String userId,
 		String postId,
 		String replyId,
-		VoteType isUpvote,
+		VoteType voteType,
 		long createdAt
 ) {}

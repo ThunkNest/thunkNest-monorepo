@@ -5,8 +5,10 @@ import com.validate.monorepo.commonlibrary.exception.NotFoundException;
 import com.validate.monorepo.commonlibrary.model.reply.ReplyRequest;
 import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.vote.VoteType;
 import com.validate.monorepo.commonlibrary.repository.mongo.ReplyRepository;
 import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
+import com.validate.monorepo.commonlibrary.repository.mongo.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +28,14 @@ public class ReplyService {
 	private final ReplyRepository replyRepository;
 	private final PostService postService;
 	private final UserRepository userRepository;
+	private final VoteRepository voteRepository;
 	
 	@Autowired
-	public ReplyService(ReplyRepository replyRepository, PostService postService, UserRepository userRepository) {
+	public ReplyService(ReplyRepository replyRepository, PostService postService, UserRepository userRepository, VoteRepository voteRepository) {
 		this.replyRepository = replyRepository;
 		this.postService = postService;
 		this.userRepository = userRepository;
+		this.voteRepository = voteRepository;
 	}
 	
 	@Transactional(readOnly = true)
@@ -108,6 +112,13 @@ public class ReplyService {
 		
 		// Batch query to fetch users by username
 		return userRepository.findAllByUsernameIn(taggedUsernames);
+	}
+	
+	public void handleVote(String postId) {
+		long upVoteCount = voteRepository.countVotesByPost(postId, VoteType.UPVOTE);
+		long downVoteCount = voteRepository.countVotesByPost(postId, VoteType.DOWNVOTE);
+		
+		replyRepository.updateVoteCount(postId, upVoteCount, downVoteCount);
 	}
 	
 }

@@ -42,6 +42,13 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	}
 	
 	@Override
+	public void updateVoteCount(String postId, long upVoteCount, long downVoteCount) {
+		Query query = new Query(Criteria.where("_id").is(postId));
+		Update update = new Update().set("upVoteCount", upVoteCount).set("downVoteCount", downVoteCount);
+		mongoTemplate.updateFirst(query, update, Reply.class);
+	}
+	
+	@Override
 	public List<Reply> findRepliesByTaggedUserId(String userId) {
 		Query query = new Query(Criteria.where("taggedUsers._id").is(userId).and("isDeleted").is(false));
 		return mongoTemplate.find(query, Reply.class);

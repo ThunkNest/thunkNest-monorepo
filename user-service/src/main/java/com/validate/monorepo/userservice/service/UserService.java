@@ -46,4 +46,17 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 	
+	public void upvoteReputationIncrease(String userId) {
+		userRepository.upvoteReputationIncrease(userId);
+	}
+	public void removeUpvoteReputationIncrease(String userId) {
+		userRepository.removeUpvoteReputationIncrease(userId);
+	}
+	public void downVoteReputationDecrease(String userId) {
+		userRepository.downVoteReputationDecrease(userId);
+	}
+	public void removeDownVoteReputationDecrease(String userId) {
+		userRepository.removeDownVoteReputationDecrease(userId);
+	}
+	
 }
