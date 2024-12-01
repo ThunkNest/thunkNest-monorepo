@@ -12,6 +12,9 @@ import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
 import com.validate.monorepo.commonlibrary.repository.mongo.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,18 +93,22 @@ public class PostService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> getAllPostsByAuthor(String userId) {
-		return postRepository.findAllPostsByAuthor(userId);
+	public Page<Post> getAllPostsByAuthor(String userId, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return postRepository.findAllPostsByAuthor(userId, pageable);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> getAllPostsUserInteractedWith(String userId) {
-		return postRepository.findAllPostsUserInteractedWith(userId);
+	public Page<Post> getAllPostsUserInteractedWith(String userId, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return postRepository.findAllPostsUserInteractedWith(userId, pageable);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> getAllPosts() {
-		return postRepository.findAllPostsAndIsDeletedFalse();
+	public Page<Post> getAllPosts(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return postRepository.findAllPostsAndIsDeletedFalse(pageable);
+		
 	}
 	
 	@Transactional
