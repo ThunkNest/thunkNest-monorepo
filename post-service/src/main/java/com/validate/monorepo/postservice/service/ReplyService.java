@@ -11,6 +11,9 @@ import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
 import com.validate.monorepo.commonlibrary.repository.mongo.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,19 +48,21 @@ public class ReplyService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Reply> getRepliesByPostId(String postId) {
+	public Page<Reply> getRepliesByPostId(String postId, int page, int size) {
 		List<String> replyIds = postService.getPostById(postId).replies();
-		return getRepliesByIds(replyIds);
+		return getRepliesByIds(replyIds, page, size);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Reply> getRepliesByIds(List<String> replyIds) {
-		return replyRepository.findAllById(replyIds);
+	public Page<Reply> getRepliesByIds(List<String> replyIds, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return replyRepository.findAllById(replyIds, pageable);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Reply> getAllReplies() {
-		return replyRepository.findAllRepliesAndIsDeletedFalse();
+	public Page<Reply> getAllReplies(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return replyRepository.findAllRepliesAndIsDeletedFalse(pageable);
 	}
 	
 	@Transactional
@@ -95,8 +100,9 @@ public class ReplyService {
 		return userRepository.findByUsername(username).orElse(null);
 	}
 	
-	public List<Reply> findRepliesByTaggedUserId(String userId) {
-		return replyRepository.findRepliesByTaggedUserId(userId);
+	public Page<Reply> findRepliesByTaggedUserId(String userId, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return replyRepository.findRepliesByTaggedUserId(userId, pageable);
 	}
 	
 	@Transactional

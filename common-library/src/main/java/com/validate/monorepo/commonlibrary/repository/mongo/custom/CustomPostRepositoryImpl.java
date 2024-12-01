@@ -53,7 +53,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 	
 	@Override
 	public Page<Post> findAllPostsAndIsDeletedFalse(Pageable pageable) {
-		Query query = new Query(Criteria.where("isDeleted").is(false));
+		Query query = new Query(Criteria.where("isDeleted").is(false)).with(pageable);
 		List<Post> posts = mongoTemplate.find(query, Post.class);
 		long total = mongoTemplate.count(query.skip(-1).limit(-1), Post.class);
 		return PageableExecutionUtils.getPage(posts, pageable, () -> total);
@@ -61,7 +61,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 	
 	@Override
 	public Page<Post> findAllPostsByAuthor(String userId, Pageable pageable) {
-		Query query = new Query(Criteria.where("author._id").is(userId).and("isDeleted").is(false));
+		Query query = new Query(Criteria.where("author._id").is(userId).and("isDeleted").is(false)).with(pageable);
 		List<Post> posts = mongoTemplate.find(query, Post.class);
 		long total = mongoTemplate.count(query.skip(-1).limit(-1), Post.class);
 		return PageableExecutionUtils.getPage(posts, pageable, () -> total);
