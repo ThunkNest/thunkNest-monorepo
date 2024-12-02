@@ -67,6 +67,17 @@ public class ReplyController {
 		return replyService.getRepliesByIds(replyIds, page, size);
 	}
 	
+	@GetMapping("/author/{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	@Operation(
+			summary = "Get all posts by author",
+			description = "Retrieve all posts created by a specific author.")
+	public Page<Reply> getAllRepliesByAuthor(@PathVariable String userId,
+	                                      @RequestParam(defaultValue = "0") int page,
+	                                      @RequestParam(defaultValue = "10") int size) {
+		return replyService.getAllPostsByAuthor(userId, page, size);
+	}
+	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Get all replies", description = "Retrieve all replies. This endpoint does not include deleted" +

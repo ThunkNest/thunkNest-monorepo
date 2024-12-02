@@ -2,7 +2,9 @@ package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
 import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.model.reply.Reply;
+import com.validate.monorepo.commonlibrary.model.user.User;
 import com.validate.monorepo.commonlibrary.model.vote.Vote;
+import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -109,6 +111,18 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 		List<Post> posts = mongoTemplate.find(findPostsQuery, Post.class);
 		long total = mongoTemplate.count(findPostsQuery.skip(-1).limit(-1), Post.class);
 		return PageableExecutionUtils.getPage(posts, pageable, () -> total);
+	}
+	
+	@Override
+	public void updateUserInAuthoredPosts(User user) {
+		BlankUtils.validateBlank(user.id());
+		
+		Query query = new Query(Criteria.where("author._id").is(user.id()));
+		Update update = new Update().set("author", user);
+		
+		mongoTemplate.updateMulti(query, update, Post.class);
+		
+		log.info("Updated author details in all posts authored by user with ID: {}", user.id());
 	}
 	
 }

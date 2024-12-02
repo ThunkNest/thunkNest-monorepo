@@ -14,5 +14,6 @@ public interface CustomReplyRepository {
 	Page<Reply> findRepliesByTaggedUserId(String userId, Pageable pageable);
 	Page<Reply> findAllRepliesAndIsDeletedFalse(Pageable pageable);
 	Page<Reply> findAllById(List<String> replyIds, Pageable pageable);
-	
+	Page<Reply> findAllRepliesByAuthor(String userId, Pageable pageable);
+	void updateUserInAuthoredPosts(User user);
 }

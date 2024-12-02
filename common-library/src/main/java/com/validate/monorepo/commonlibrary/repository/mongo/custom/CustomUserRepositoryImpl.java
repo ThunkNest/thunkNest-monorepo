@@ -2,6 +2,7 @@ package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
 import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -46,35 +47,55 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
 	}
 	
 	@Override
-	public void upvoteReputationIncrease(String userId) {
+	public User upvoteReputationIncrease(String userId) {
 		Query query = new Query(Criteria.where("_id").is(userId));
 		Update update = new Update().inc("reputationScore", 3);
 		
-		mongoTemplate.updateFirst(query, update, User.class);
+		return mongoTemplate.findAndModify(
+				query,
+				update,
+				FindAndModifyOptions.options().returnNew(true),
+				User.class
+		);
 	}
 	
 	@Override
-	public void removeUpvoteReputationIncrease(String userId) {
+	public User removeUpvoteReputationIncrease(String userId) {
 		Query query = new Query(Criteria.where("_id").is(userId));
 		Update update = new Update().inc("reputationScore", -3);
 		
-		mongoTemplate.updateFirst(query, update, User.class);
+		return mongoTemplate.findAndModify(
+				query,
+				update,
+				FindAndModifyOptions.options().returnNew(true),
+				User.class
+		);
 	}
 	
 	@Override
-	public void downVoteReputationDecrease(String userId) {
+	public User downVoteReputationDecrease(String userId) {
 		Query query = new Query(Criteria.where("_id").is(userId));
 		Update update = new Update().inc("reputationScore", -1);
 		
-		mongoTemplate.updateFirst(query, update, User.class);
+		return mongoTemplate.findAndModify(
+				query,
+				update,
+				FindAndModifyOptions.options().returnNew(true),
+				User.class
+		);
 	}
 	
 	@Override
-	public void removeDownVoteReputationDecrease(String userId) {
+	public User removeDownVoteReputationDecrease(String userId) {
 		Query query = new Query(Criteria.where("_id").is(userId));
 		Update update = new Update().inc("reputationScore", 1);
 		
-		mongoTemplate.updateFirst(query, update, User.class);
+		return mongoTemplate.findAndModify(
+				query,
+				update,
+				FindAndModifyOptions.options().returnNew(true),
+				User.class
+		);
 	}
 	
 }

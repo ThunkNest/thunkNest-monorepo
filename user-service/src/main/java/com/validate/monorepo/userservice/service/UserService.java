@@ -2,6 +2,9 @@ package com.validate.monorepo.userservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
 import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.model.vote.VoteRequest;
+import com.validate.monorepo.commonlibrary.repository.mongo.PostRepository;
+import com.validate.monorepo.commonlibrary.repository.mongo.ReplyRepository;
 import com.validate.monorepo.commonlibrary.repository.mongo.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +15,13 @@ import java.util.Objects;
 public class UserService {
 	
 	private final UserRepository userRepository;
+	private final PostRepository postRepository;
+	private final ReplyRepository replyRepository;
 	
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PostRepository postRepository, ReplyRepository replyRepository) {
 		this.userRepository = userRepository;
+		this.postRepository = postRepository;
+		this.replyRepository = replyRepository;
 	}
 	
 	public User getUserById(String id) {
@@ -46,17 +53,34 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 	
-	public void upvoteReputationIncrease(String userId) {
-		userRepository.upvoteReputationIncrease(userId);
+	public void upvoteReputationIncrease(String userId, VoteRequest request) {
+		User author = userRepository.upvoteReputationIncrease(userId);
+		if (request.postId() != null) updateAllPostsUserAuthored(author);
+		else updateAllRepliesUserAuthored(author);
 	}
-	public void removeUpvoteReputationIncrease(String userId) {
-		userRepository.removeUpvoteReputationIncrease(userId);
+	public void removeUpvoteReputationIncrease(String userId, VoteRequest request) {
+		User author = userRepository.removeUpvoteReputationIncrease(userId);
+		
+		if (request.postId() != null) updateAllPostsUserAuthored(author);
+		else updateAllRepliesUserAuthored(author);
 	}
-	public void downVoteReputationDecrease(String userId) {
-		userRepository.downVoteReputationDecrease(userId);
+	public void downVoteReputationDecrease(String userId, VoteRequest request) {
+		User author = userRepository.downVoteReputationDecrease(userId);
+		if (request.postId() != null) updateAllPostsUserAuthored(author);
+		else updateAllRepliesUserAuthored(author);
 	}
-	public void removeDownVoteReputationDecrease(String userId) {
-		userRepository.removeDownVoteReputationDecrease(userId);
+	public void removeDownVoteReputationDecrease(String userId, VoteRequest request) {
+		User author = userRepository.removeDownVoteReputationDecrease(userId);
+		if (request.postId() != null) updateAllPostsUserAuthored(author);
+		else updateAllRepliesUserAuthored(author);
+	}
+	
+	public void updateAllPostsUserAuthored(User author) {
+		postRepository.updateUserInAuthoredPosts(author);
+	}
+	
+	public void updateAllRepliesUserAuthored(User author) {
+		replyRepository.updateUserInAuthoredPosts(author);
 	}
 	
 }

@@ -138,4 +138,8 @@ public class ReplyService {
 		replyRepository.updateVoteCount(replyId, upVoteCount, downVoteCount);
 	}
 	
+	public Page<Reply> getAllPostsByAuthor(String userId, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return replyRepository.findAllRepliesByAuthor(userId, pageable);
+	}
 }
