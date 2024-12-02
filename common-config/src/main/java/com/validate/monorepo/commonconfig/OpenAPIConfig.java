@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,10 +30,14 @@ public class OpenAPIConfig {
                 .description(description)
                 .contact(new Contact()
                     .name("API Support")
-                    .email("your-email@example.com")))
-            .servers(Arrays.asList(
-                new Server().url("http://localhost:" + port)
-                    .description("Local server")
-            ));
+                    .email("contact@thunknest.com")));
     }
-} 
+    
+    @Bean
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+            .group("public")
+            .pathsToMatch("/**")
+            .build();
+    }
+}
