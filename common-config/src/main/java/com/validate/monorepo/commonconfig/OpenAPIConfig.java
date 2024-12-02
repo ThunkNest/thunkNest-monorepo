@@ -40,4 +40,4 @@ public class OpenAPIConfig {
             .pathsToMatch("/**")
             .build();
     }
-} 
+}
