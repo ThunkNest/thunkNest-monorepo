@@ -3,11 +3,14 @@ package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -49,15 +52,30 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	}
 	
 	@Override
-	public List<Reply> findRepliesByTaggedUserId(String userId) {
-		Query query = new Query(Criteria.where("taggedUsers._id").is(userId).and("isDeleted").is(false));
-		return mongoTemplate.find(query, Reply.class);
+	public Page<Reply> findRepliesByTaggedUserId(String userId, Pageable pageable) {
+		Query query = new Query(Criteria.where("taggedUsers._id").is(userId).and("isDeleted").is(false))
+				.with(pageable);
+		List<Reply> replies =  mongoTemplate.find(query, Reply.class);
+		long total = mongoTemplate.count(query.skip(-1).limit(-1), Reply.class);
+		
+		return PageableExecutionUtils.getPage(replies, pageable, () -> total);
 	}
 	
 	@Override
-	public List<Reply> findAllRepliesAndIsDeletedFalse() {
-		Query query = new Query(Criteria.where("isDeleted").is(false));
-		return mongoTemplate.find(query, Reply.class);
+	public Page<Reply> findAllRepliesAndIsDeletedFalse(Pageable pageable) {
+		Query query = new Query(Criteria.where("isDeleted").is(false)).with(pageable);
+		List<Reply> replies = mongoTemplate.find(query, Reply.class);
+		long total = mongoTemplate.count(query.skip(-1).limit(-1), Reply.class);
+		return PageableExecutionUtils.getPage(replies, pageable, () -> total);
+	}
+	
+	@Override
+	public Page<Reply> findAllById(List<String> replyIds, Pageable pageable) {
+		Query query = new Query(Criteria.where("_id").in(replyIds)).with(pageable);
+		List<Reply> replies =  mongoTemplate.find(query, Reply.class);
+		long total = mongoTemplate.count(query.skip(-1).limit(-1), Reply.class);
+		
+		return PageableExecutionUtils.getPage(replies, pageable, () -> total);
 	}
 	
 }

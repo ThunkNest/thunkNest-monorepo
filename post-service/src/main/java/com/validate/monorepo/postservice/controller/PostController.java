@@ -6,8 +6,18 @@ import com.validate.monorepo.commonlibrary.util.BlankUtils;
 import com.validate.monorepo.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -56,9 +66,10 @@ public class PostController {
 	@Operation(
 			summary = "Get all posts by author",
 			description = "Retrieve all posts created by a specific author.")
-	public List<Post> getAllPostsByAuthor(@PathVariable String userId) {
-		BlankUtils.validateBlank(userId);
-		return postService.getAllPostsByAuthor(userId);
+	public Page<Post> getAllPostsByAuthor(@PathVariable String userId,
+	                                      @RequestParam(defaultValue = "0") int page,
+	                                      @RequestParam(defaultValue = "10") int size) {
+		return postService.getAllPostsByAuthor(userId, page, size);
 	}
 	
 	@GetMapping("/user/{userId}/interacted")
@@ -67,9 +78,10 @@ public class PostController {
 			summary = "Get all posts user interacted with",
 			description = "Retrieve all posts that a user has interacted with, including upvotes, downvotes, replies, and " +
 					"created posts. This endpoint excludes deleted posts.")
-	public List<Post> getAllPostsUserInteractedWith(@PathVariable String userId) {
-		BlankUtils.validateBlank(userId);
-		return postService.getAllPostsUserInteractedWith(userId);
+	public Page<Post> getAllPostsUserInteractedWith(@PathVariable String userId,
+	                                                @RequestParam(defaultValue = "0") int page,
+	                                                @RequestParam(defaultValue = "10") int size) {
+		return postService.getAllPostsUserInteractedWith(userId, page, size);
 	}
 	
 	@GetMapping
@@ -77,8 +89,9 @@ public class PostController {
 	@Operation(
 			summary = "Get all posts",
 			description = "Retrieve all posts. This endpoint excludes deleted posts.")
-	public List<Post> getAllPosts() {
-		return postService.getAllPosts();
+	public Page<Post> getAllPosts(@RequestParam(defaultValue = "0") int page,
+	                              @RequestParam(defaultValue = "10") int size) {
+		return postService.getAllPosts(page, size);
 	}
 	
 	@DeleteMapping("/{postId}")
