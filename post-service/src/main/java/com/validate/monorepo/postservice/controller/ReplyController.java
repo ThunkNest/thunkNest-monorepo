@@ -49,9 +49,9 @@ public class ReplyController {
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Get replies to a post given it's ID", description = "Retrieve replies to a post by its unique ID." +
 			"This endpoint does not return deleted replies")
-	public List<Reply> getRepliesByPostId(@PathVariable String replyId) {
-		BlankUtils.validateBlank(replyId);
-		return replyService.getRepliesByPostId(replyId);
+	public List<Reply> getRepliesByPostId(@PathVariable String postId) {
+		BlankUtils.validateBlank(postId);
+		return replyService.getRepliesByPostId(postId);
 	}
 	
 	@PostMapping("/")
