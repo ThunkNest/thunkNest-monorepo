@@ -32,8 +32,8 @@ public class UserEventListener {
 		
 		final VoteRequest payload = eventMessage.payload();
 		String authorId = getResourceAuthor(payload);
-		if (payload.isRemoval()) userService.removeUpvoteReputationIncrease(authorId);
-		else userService.upvoteReputationIncrease(authorId);
+		if (payload.isRemoval()) userService.removeUpvoteReputationIncrease(authorId, payload);
+		else userService.upvoteReputationIncrease(authorId, payload);
 	}
 	
 	@RabbitListener(queues = "q.user.downVotes")
@@ -42,8 +42,8 @@ public class UserEventListener {
 		
 		final VoteRequest payload = eventMessage.payload();
 		String authorId = getResourceAuthor(payload);
-		if (payload.isRemoval()) userService.removeDownVoteReputationDecrease(authorId);
-		else userService.downVoteReputationDecrease(authorId);
+		if (payload.isRemoval()) userService.removeDownVoteReputationDecrease(authorId, payload);
+		else userService.downVoteReputationDecrease(authorId, payload);
 	}
 	
 	String getResourceAuthor(VoteRequest payload) {

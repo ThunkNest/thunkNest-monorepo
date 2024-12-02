@@ -10,9 +10,9 @@ public interface CustomUserRepository {
 	Optional<User> findByUsername(final String username);
 	Optional<User> findByEmail(final String email);
 	List<User> searchByUsername(final String usernameFragment);
-	void upvoteReputationIncrease(String userId);
-	void removeUpvoteReputationIncrease(String userId);
-	void downVoteReputationDecrease(String userId);
-	void removeDownVoteReputationDecrease(String userId);
+	User upvoteReputationIncrease(String userId);
+	User removeUpvoteReputationIncrease(String userId);
+	User downVoteReputationDecrease(String userId);
+	User removeDownVoteReputationDecrease(String userId);
 
 }

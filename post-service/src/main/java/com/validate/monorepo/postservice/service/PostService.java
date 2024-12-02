@@ -28,14 +28,12 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
 	private final VoteRepository voteRepository;
-	private final EventPublisher eventPublisher;
 	
 	@Autowired
-	public PostService(PostRepository postRepository, UserRepository userRepository, VoteRepository voteRepository, EventPublisher eventPublisher) {
+	public PostService(PostRepository postRepository, UserRepository userRepository, VoteRepository voteRepository) {
 		this.postRepository = postRepository;
 		this.userRepository = userRepository;
 		this.voteRepository = voteRepository;
-		this.eventPublisher = eventPublisher;
 	}
 	
 	@Transactional

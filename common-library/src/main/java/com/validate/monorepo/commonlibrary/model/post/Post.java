@@ -36,5 +36,5 @@ public record Post(
 		return new Post(id, title, description, true, Instant.now().toEpochMilli(), isEdited, editedAt,
 				upVoteCount, downVoteCount, openToCoFounder, author, replies, createdAt);
 	}
-
+	
 }

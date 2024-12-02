@@ -2,6 +2,8 @@ package com.validate.monorepo.commonlibrary.repository.mongo.custom;
 
 import com.validate.monorepo.commonlibrary.model.reply.Reply;
 import com.validate.monorepo.commonlibrary.model.user.User;
+import com.validate.monorepo.commonlibrary.util.BlankUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.time.Instant;
 import java.util.List;
 
+@Slf4j
 public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 	
 	private final MongoTemplate mongoTemplate;
@@ -78,4 +81,23 @@ public class CustomReplyRepositoryImpl implements CustomReplyRepository {
 		return PageableExecutionUtils.getPage(replies, pageable, () -> total);
 	}
 	
+	@Override
+	public Page<Reply> findAllRepliesByAuthor(String userId, Pageable pageable) {
+		Query query = new Query(Criteria.where("author._id").is(userId).and("isDeleted").is(false)).with(pageable);
+		List<Reply> replies = mongoTemplate.find(query, Reply.class);
+		long total = mongoTemplate.count(query.skip(-1).limit(-1), Reply.class);
+		return PageableExecutionUtils.getPage(replies, pageable, () -> total);
+	}
+	
+	@Override
+	public void updateUserInAuthoredPosts(User user) {
+		BlankUtils.validateBlank(user.id());
+		
+		Query query = new Query(Criteria.where("author._id").is(user.id()));
+		Update update = new Update().set("author", user);
+		
+		mongoTemplate.updateMulti(query, update, Reply.class);
+		
+		log.info("Updated author details in all posts authored by user with ID: {}", user.id());
+	}
 }

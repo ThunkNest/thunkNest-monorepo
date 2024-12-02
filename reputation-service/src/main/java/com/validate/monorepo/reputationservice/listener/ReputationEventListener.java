@@ -28,7 +28,7 @@ public class ReputationEventListener {
 	
 	@RabbitListener(queues = "q.reputation.upVotes")
 	public void handleUpVote(EventMessage<VoteRequest> eventMessage) {
-		log.info("UserEventListener: received UPVOTE: {}", eventMessage);
+		log.info("ReputationEventListener: received UPVOTE: {}", eventMessage);
 		
 		VoteRequest payload = eventMessage.payload();
 		String authorId = getResourceAuthor(payload);
@@ -40,7 +40,7 @@ public class ReputationEventListener {
 	
 	@RabbitListener(queues = "q.reputation.downVotes")
 	public void handleDownVote(EventMessage<VoteRequest> eventMessage) {
-		log.info("UserEventListener: received DOWNVOTE: {}", eventMessage);
+		log.info("ReputationEventListener: received DOWNVOTE: {}", eventMessage);
 		
 		final VoteRequest payload = eventMessage.payload();
 		String authorId = getResourceAuthor(payload);
