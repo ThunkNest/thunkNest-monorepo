@@ -10,7 +10,7 @@
   "deploy": {
     "startCommand": "java -Xmx1g -XX:+UseShenandoahGC -Dserver.port=$PORT -Dspring.profiles.active=stage -jar post-service/build/libs/post-service-2024.1.jar",
     "runtime": "V2",
-    "numReplicas": 1,
+    "numReplicas": 0,
     "sleepApplication": true,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
