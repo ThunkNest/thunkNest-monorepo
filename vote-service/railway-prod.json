@@ -10,7 +10,7 @@
   "deploy": {
     "startCommand": "java -Xmx1g -XX:+UseShenandoahGC -Dserver.port=$PORT -Dspring.profiles.active=prod -jar vote-service/build/libs/vote-service-2024.1.jar",
     "runtime": "V2",
-    "numReplicas": 0,
+    "numReplicas": 1,
     "sleepApplication": true,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
