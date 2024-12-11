@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.validate.monorepo.searchservice'
+version = '2024.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common-library')
+    implementation project(':common-config')
+
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.17.10'
+}
+
+test {
+    useJUnitPlatform()
+}

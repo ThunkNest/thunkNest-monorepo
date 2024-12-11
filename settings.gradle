@@ -7,3 +7,5 @@ include 'post-service'
 include 'reputation-service'
 include 'user-service'
 include 'vote-service'
+include 'search-service'
+

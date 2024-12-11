@@ -1,0 +1,9 @@
+server:
+  forward-headers-strategy: framework
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://thunknestAdmin:4gAI74ZvKD1o3eeg@thunknestdb.wa6jo.mongodb.net/?retryWrites=true&w=majority&appName=ThunkNestDB
+      database: thunkNestDB
+
