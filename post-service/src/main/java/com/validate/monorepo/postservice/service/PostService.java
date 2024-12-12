@@ -2,6 +2,7 @@ package com.validate.monorepo.postservice.service;
 
 import com.validate.monorepo.commonlibrary.exception.BadRequestException;
 import com.validate.monorepo.commonlibrary.exception.NotFoundException;
+import com.validate.monorepo.commonlibrary.model.ampq.EventMessage;
 import com.validate.monorepo.commonlibrary.model.post.PostRequest;
 import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.model.user.User;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -28,12 +30,14 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
 	private final VoteRepository voteRepository;
+	private final EventPublisher eventPublisher;
 	
 	@Autowired
-	public PostService(PostRepository postRepository, UserRepository userRepository, VoteRepository voteRepository) {
+	public PostService(PostRepository postRepository, UserRepository userRepository, VoteRepository voteRepository, EventPublisher eventPublisher) {
 		this.postRepository = postRepository;
 		this.userRepository = userRepository;
 		this.voteRepository = voteRepository;
+		this.eventPublisher = eventPublisher;
 	}
 	
 	@Transactional
@@ -49,6 +53,8 @@ public class PostService {
 		Post createdPost = postRepository.save(post);
 		log.info("Created Post with ID: {}", createdPost.id());
 		log.info("Post: {}", createdPost);
+		
+		eventPublisher.publishPostUpdateEvent(createPostEventMessage(createdPost));
 		
 		return createdPost;
 	}
@@ -87,7 +93,10 @@ public class PostService {
 				postToUpdate.createdAt()
 		);
 		
-		return postRepository.save(updatedPost);
+		Post savedUpdatedPost =  postRepository.save(updatedPost);
+		eventPublisher.publishPostUpdateEvent(createPostEventMessage(savedUpdatedPost));
+		
+		return savedUpdatedPost;
 	}
 	
 	@Transactional(readOnly = true)
@@ -111,8 +120,10 @@ public class PostService {
 	
 	@Transactional
 	public void deletePost(String postId) {
-		getPostById(postId);
-		postRepository.save(getPostById(postId).deletePost());
+		Post postToDelete = getPostById(postId).deletePost();
+		
+		postRepository.save(postToDelete);
+		eventPublisher.publishPostUpdateEvent(createPostEventMessage(postToDelete));
 	}
 	
 	@Transactional
@@ -127,4 +138,9 @@ public class PostService {
 		
 		postRepository.updateVoteCount(postId, upVoteCount, downVoteCount);
 	}
+	
+	private EventMessage<Post> createPostEventMessage(Post postToDelete) {
+		return new EventMessage<>(UUID.randomUUID().toString(), postToDelete, Instant.now().toEpochMilli());
+	}
+	
 }

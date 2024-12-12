@@ -35,10 +35,27 @@ public class PostSyncService {
 	public void indexPost(Post post) {
 		try {
 			if (!post.isDeleted() || post.deletedAt() == 0) {
+				// Preprocess data (e.g., lowercased fields)
+				Post processedPost = new Post(
+						post.id(),
+						post.title().toLowerCase(),
+						post.description().toLowerCase(),
+						post.isDeleted(),
+						post.deletedAt(),
+						post.isEdited(),
+						post.editedAt(),
+						post.upVoteCount(),
+						post.downVoteCount(),
+						post.openToCoFounder(),
+						post.author(),
+						post.replies(),
+						post.createdAt()
+				);
+				
 				IndexRequest<Post> request = IndexRequest.of(builder -> builder
 						.index("posts")
-						.id(post.id())
-						.document(post)
+						.id(processedPost.id())
+						.document(processedPost)
 				);
 				elasticsearchClient.index(request);
 			}
