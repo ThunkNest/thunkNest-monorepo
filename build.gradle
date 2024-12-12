@@ -39,6 +39,7 @@ allprojects {
 
     dependencies {
         // Spring core dependencies
+        implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
         implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
         implementation 'org.springframework.boot:spring-boot-starter-logging'
         implementation 'org.springframework.boot:spring-boot-starter-amqp'
@@ -70,8 +71,17 @@ allprojects {
         // Swagger
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
-        // Apache Common
+        // Apache
         implementation 'org.apache.commons:commons-lang3:3.17.0'
+        implementation 'org.apache.httpcomponents.client5:httpclient5:5.4-alpha2'
+
+        // Elastic Search
+        implementation 'co.elastic.clients:elasticsearch-java:8.9.0'
+        implementation('org.elasticsearch.client:elasticsearch-rest-client') {
+            version {
+                strictly '8.9.0'
+            }
+        }
 
         // Testing dependencies
         testImplementation 'org.springframework.boot:spring-boot-starter-test'

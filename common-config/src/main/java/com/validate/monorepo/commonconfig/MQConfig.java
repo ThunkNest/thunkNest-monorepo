@@ -1,8 +1,10 @@
 package com.validate.monorepo.commonconfig;
 
+import com.validate.monorepo.commonlibrary.rabbitmq.RabbitMQConstants;
 import jakarta.annotation.PostConstruct;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -34,19 +36,25 @@ public class MQConfig {
 	// Fanout Exchange for upvotes
 	@Bean
 	public FanoutExchange upVoteExchange() {
-		return new FanoutExchange("x.upVotes", true, false);
+		return new FanoutExchange(RabbitMQConstants.EXCHANGE_UPVOTES, true, false);
 	}
 	
 	// Fanout Exchange for downvotes
 	@Bean
 	public FanoutExchange downVoteExchange() {
-		return new FanoutExchange("x.downVotes", true, false);
+		return new FanoutExchange(RabbitMQConstants.EXCHANGE_DOWNVOTES, true, false);
+	}
+	
+	// Direct Exchange for posts
+	@Bean
+	public DirectExchange postsExchange() {
+		return new DirectExchange(RabbitMQConstants.EXCHANGE_POSTS, true, false);
 	}
 	
 	// Queue for UserService
 	@Bean
 	public Queue userUpVoteQueue() {
-		return new Queue("q.user.upVotes", true);
+		return new Queue(RabbitMQConstants.QUEUE_USER_UPVOTES, true);
 	}
 	
 	@Bean
@@ -56,7 +64,7 @@ public class MQConfig {
 	
 	@Bean
 	public Queue userDownVoteQueue() {
-		return new Queue("q.user.downVotes", true);
+		return new Queue(RabbitMQConstants.QUEUE_USER_DOWNVOTES, true);
 	}
 	
 	@Bean
@@ -67,7 +75,7 @@ public class MQConfig {
 	// Queue for PostService
 	@Bean
 	public Queue postUpVoteQueue() {
-		return new Queue("q.postAndReply.upVotes", true);
+		return new Queue(RabbitMQConstants.QUEUE_POSTANDREPLY_UPVOTES, true);
 	}
 	
 	@Bean
@@ -77,7 +85,7 @@ public class MQConfig {
 	
 	@Bean
 	public Queue postDownVoteQueue() {
-		return new Queue("q.postAndReply.downVotes", true);
+		return new Queue(RabbitMQConstants.QUEUE_POSTANDREPLY_DOWNVOTES, true);
 	}
 	
 	@Bean
@@ -88,7 +96,7 @@ public class MQConfig {
 	// Queue for ReputationService
 	@Bean
 	public Queue reputationUpVoteQueue() {
-		return new Queue("q.reputation.upVotes", true);
+		return new Queue(RabbitMQConstants.QUEUE_REPUTATION_UPVOTES, true);
 	}
 	
 	@Bean
@@ -98,7 +106,7 @@ public class MQConfig {
 	
 	@Bean
 	public Queue reputationDownVoteQueue() {
-		return new Queue("q.reputation.downVotes", true);
+		return new Queue(RabbitMQConstants.QUEUE_REPUTATION_DOWNVOTES, true);
 	}
 	
 	@Bean
@@ -106,15 +114,25 @@ public class MQConfig {
 		return BindingBuilder.bind(reputationDownVoteQueue()).to(downVoteExchange());
 	}
 	
+	@Bean
+	public Queue postsUpdateQueue() {
+		return new Queue(RabbitMQConstants.QUEUE_POSTS_UPDATE, true); // Durable queue
+	}
+	
+	@Bean
+	public Binding postsUpdateBinding() {
+		return BindingBuilder.bind(postsUpdateQueue()).to(postsExchange()).with(RabbitMQConstants.ROUTING_KEY_POST_UPDATE);
+	}
+	
 	// Dead Letter Queues
 	@Bean
 	public Queue upVoteDLQ() {
-		return new Queue("q.upVotes.dlq", true);
+		return new Queue(RabbitMQConstants.DLQ_UPVOTES, true);
 	}
 	
 	@Bean
 	public Queue downVoteDLQ() {
-		return new Queue("q.downVotes.dlq", true);
+		return new Queue(RabbitMQConstants.DLQ_DOWNVOTES, true);
 	}
 	
 	// RabbitAdmin for managing the queues and exchanges
