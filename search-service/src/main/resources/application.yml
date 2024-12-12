@@ -27,3 +27,10 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /v3/api-docs
+
+elasticsearch:
+  url: ${ELASTIC_URL:thunk-elasticsearch-stage.up.railway.app}
+  username: ${ELASTIC_USERNAME:elastic}
+  password: ${ELASTIC_PASSWORD:b7klkkauqmvjgc1r2787u14ia7b2s91h}
+
+
