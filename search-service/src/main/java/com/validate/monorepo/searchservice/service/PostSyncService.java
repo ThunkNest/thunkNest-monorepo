@@ -7,6 +7,7 @@ import com.validate.monorepo.commonlibrary.model.post.Post;
 import com.validate.monorepo.commonlibrary.repository.mongo.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,6 +26,12 @@ public class PostSyncService {
 		this.postRepository = postRepository;
 	}
 	
+	@Scheduled(cron = "0 0 0/3 * * ?", zone = "UTC")
+	public void scheduledIndexingJob() {
+		log.info("scheduledIndexingJob: Starting scheduled post indexing...");
+		syncAllPosts();
+	}
+	
 	public void syncAllPosts() {
 		log.info("syncAllPosts: Starting sync for all posts to elastic, start={}", new Date());
 		List<Post> posts = postRepository.findAll();
@@ -33,6 +40,7 @@ public class PostSyncService {
 	}
 	
 	public void indexPost(Post post) {
+		log.info("indexPost: indexing post with ID={}", post.id());
 		try {
 			if (!post.isDeleted() || post.deletedAt() == 0) {
 				// Preprocess data (e.g., lowercased fields)
@@ -66,6 +74,7 @@ public class PostSyncService {
 	}
 	
 	public void deletePost(String postId) {
+		log.info("deletePost: deleting post from index post with ID={}", postId);
 		try {
 			DeleteRequest request = DeleteRequest.of(builder -> builder
 					.index("posts")
